@@ -49,7 +49,7 @@ function JuryRatingPage() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await api(`/movies/id/${id}`);
+        const res = await api(`/movies/${id}`);
         if (res && res.ok) {
           const data = await res.json();
           setMovie(data);
