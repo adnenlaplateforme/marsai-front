@@ -45,8 +45,9 @@ function EditMoviePage() {
         }
 
         try {
-            const res = await fetch(import.meta.env.VITE_SERVER_ADDRESS + '/movies/edit/' + movie.id, {
-                method: 'POST',
+            const res = await fetch(import.meta.env.VITE_SERVER_ADDRESS + '/movies/' + movie.id, {
+                method: 'PATCH',
+                headers: { Authorization: `Bearer ${token}` },
                 body: formData,
             });
             const data = await res.json();
@@ -79,7 +80,7 @@ function EditMoviePage() {
         const fetchMovie = async (movieId) => {
             try {
                 const res = await api(
-                    '/movies/id/' + movieId
+                    '/movies/' + movieId
                 );
                 if (res && res.ok) {
                     const data = await res.json();
@@ -91,7 +92,42 @@ function EditMoviePage() {
         };
 
         const fetchData = async () => {
-            setMovie(await fetchMovie(await fetchMovieIdFromToken()));
+            const movieId = await fetchMovieIdFromToken();
+            const movieData = await fetchMovie(movieId);
+            setMovie(movieData);
+            if (movieData) {
+                form.reset({
+                    originalTitle: movieData.original_title,
+                    englishTitle: movieData.english_title,
+                    language: movieData.language,
+                    originalSynopsis: movieData.original_synopsis,
+                    englishSynopsis: movieData.english_synopsis,
+                    creativeProcess: movieData.creative_process,
+                    aiTools: movieData.ai_tools,
+                    hasSubs: movieData.has_subs,
+                    isHybrid: movieData.is_hybrid,
+                    director: {
+                        gender: movieData.director?.gender,
+                        firstname: movieData.director?.firstname,
+                        lastname: movieData.director?.lastname,
+                        email: movieData.director?.email,
+                        job: movieData.director?.job,
+                        phone: movieData.director?.phone,
+                        address: movieData.director?.address,
+                        city: movieData.director?.city,
+                        zipcode: movieData.director?.zipcode,
+                        region: movieData.director?.region,
+                        country: movieData.director?.country,
+                        birthdate: movieData.director?.birthdate,
+                        facebookUrl: movieData.director?.facebook_url,
+                        instagramUrl: movieData.director?.instagram_url,
+                        youtubeUrl: movieData.director?.youtube_url,
+                        linkedinUrl: movieData.director?.linkedin_url,
+                        twitterUrl: movieData.director?.twitter_url,
+                    },
+                    collaborators: movieData.collaborators ?? [],
+                });
+            }
             setLoading(false);
         }
         fetchData();
@@ -132,14 +168,9 @@ function EditMoviePage() {
                     encType="multipart/form-data"
                     noValidate
                 >
-                    <input type="hidden" name="token" value={token}
-                        {...form.register("token", { required: true })} />
-                    <input type="hidden" name="status" value='pending_review'
-                        {...form.register("status", { required: true })} />
-
                     <MovieSubmitInfo form={form} movie={movie} />
                     <MovieSubmitDeclaration form={form} movie={movie} />
-                    <MovieSubmitDeliverables form={form} />
+                    <MovieSubmitDeliverables form={form} movie={movie} />
                     <MovieSubmitTeamComposition form={form} movie={movie} />
                     <MovieCertificateOfOwnership />
                     <button
