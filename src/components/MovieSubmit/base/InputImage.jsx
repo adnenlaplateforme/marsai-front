@@ -16,9 +16,10 @@ function InputImage({
   iconSize = 40,
   className = '',
   errorClassName = '',
+  existingUrl = null,
 }) {
   const { t } = useTranslation();
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState(existingUrl);
   const { register, resetField } = form;
   const errors = 'submitMovieForm.formErrors.';
   const [error, setError] = useState('');

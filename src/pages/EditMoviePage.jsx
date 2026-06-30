@@ -31,8 +31,11 @@ function EditMoviePage() {
 
     async function onSubmit(data) {
         const formData = new FormData();
+        const stillFields = ['stillImageA', 'stillImageB', 'stillImageC'];
+        const stillExistingKeys = ['existingStillA', 'existingStillB', 'existingStillC'];
 
         for (const [key, value] of Object.entries(data)) {
+            if (stillFields.includes(key)) continue; // handled separately below
             if (key === 'director' || key === 'collaborators') {
                 formData.append(key, JSON.stringify(value));
             } else if (value instanceof FileList) {
@@ -43,6 +46,15 @@ function EditMoviePage() {
                 formData.append(key, value);
             }
         }
+
+        stillFields.forEach((key, i) => {
+            const value = data[key];
+            if (value instanceof FileList && value.length > 0) {
+                formData.append(key, value[0]);
+            } else if (movie?.stills?.[i]) {
+                formData.append(stillExistingKeys[i], movie.stills[i]);
+            }
+        });
 
         try {
             const res = await fetch(import.meta.env.VITE_SERVER_ADDRESS + '/movies/' + movie.id, {
@@ -104,8 +116,8 @@ function EditMoviePage() {
                     englishSynopsis: movieData.english_synopsis,
                     creativeProcess: movieData.creative_process,
                     aiTools: movieData.ai_tools,
-                    hasSubs: movieData.has_subs,
-                    isHybrid: movieData.is_hybrid,
+                    hasSubs: movieData.has_subs ? 'true' : 'false',
+                    isHybrid: movieData.is_hybrid ? 'true' : 'false',
                     director: {
                         gender: movieData.director?.gender,
                         firstname: movieData.director?.firstname,
