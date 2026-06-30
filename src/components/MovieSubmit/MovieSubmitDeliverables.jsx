@@ -4,7 +4,7 @@ import FormSection from './base/FormSection';
 import { useTranslation } from 'react-i18next';
 import InputMovie from './base/InputMovie';
 
-function MovieSubmitDeliverables({ form }) {
+function MovieSubmitDeliverables({ form, movie }) {
   const { t } = useTranslation();
   const target = 'submitMovieForm.deliverables.';
   const errors = 'submitMovieForm.formErrors.';
@@ -21,7 +21,8 @@ function MovieSubmitDeliverables({ form }) {
           maxSize={300}
           description={t(target + 'video.description')}
           subDescription={t(target + 'video.subDescription')}
-          validation={{ required: t(errors + 'required') }}
+          validation={{ required: !movie?.video_path && t(errors + 'required') }}
+          existingUrl={movie?.video_path}
         />
 
         <div className="flex flex-col gap-2 pb-10 pt-1 items-center">
@@ -56,7 +57,8 @@ function MovieSubmitDeliverables({ form }) {
             description={t(target + 'coverImage.description')}
             subDescription={t(target + 'coverImage.subDescription')}
             form={form}
-            validation={{ required: t(errors + 'required') }}
+            validation={{ required: !movie?.cover_path && t(errors + 'required') }}
+            existingUrl={movie?.cover_path}
           />
         </div>
         <div className="relative flex flex-col items-center gap-3 w-full">
@@ -70,6 +72,7 @@ function MovieSubmitDeliverables({ form }) {
               id="still-image-a"
               name="stillImageA"
               form={form}
+              existingUrl={movie?.stills?.[0]}
             />
             <InputImage
               className="aspect-3/4 w-20 justify-center object-cover"
@@ -79,6 +82,7 @@ function MovieSubmitDeliverables({ form }) {
               id="still-image-b"
               name="stillImageB"
               form={form}
+              existingUrl={movie?.stills?.[1]}
             />
             <InputImage
               className="aspect-3/4 w-20 justify-center object-cover"
@@ -88,6 +92,7 @@ function MovieSubmitDeliverables({ form }) {
               id="still-image-c"
               name="stillImageC"
               form={form}
+              existingUrl={movie?.stills?.[2]}
             />
           </div>
         </div>

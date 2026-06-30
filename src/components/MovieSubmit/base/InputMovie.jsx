@@ -12,12 +12,13 @@ function InputMovie({
   subDescription,
   maxSize = 0,
   validation = false,
+  existingUrl = null,
 }) {
   const { t } = useTranslation();
   const target = 'submitMovieForm.deliverables.video.';
   const errors = 'submitMovieForm.formErrors.';
 
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState(existingUrl);
   const [error, setError] = useState('');
   const { register, resetField } = form;
 

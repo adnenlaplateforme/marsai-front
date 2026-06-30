@@ -124,20 +124,27 @@ function Navbar() {
                 </NavLink>
               </li>
 
-              {isJury ?
+              <li className={`group relative text-white`}>
+                <NavLink
+                  to='/jury'
+                  className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
+                  onClick={() => navbarToggleHandler(false)}
+                >
+                  {t('navbar.jury')}
+                </NavLink>
+              </li>
 
+              {isJury && (
                 <li className={`group relative text-white`}>
                   <NavLink
-                    to='/jury'
+                    to='/jury/dashboard'
                     className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
                     onClick={() => navbarToggleHandler(false)}
                   >
-                    {t('navbar.jury')}
+                    Mon espace jury
                   </NavLink>
-                </li> : <></>
-
-
-              }
+                </li>
+              )}
 
 
               {isAdmin ?
