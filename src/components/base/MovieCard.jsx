@@ -22,7 +22,7 @@ function MovieCard({ data }) {
 
   return (
     <Link
-      to={'/movies/' + data.slug}
+      to={'/movies/' + data.id + '-' + data.slug}
       className=" hover:opacity-60 rounded-xl"
 
     >
