@@ -28,3 +28,11 @@ dist-ssr
 # Added Manually
 .env
 vite.config.js
+
+# devbox
+devbox.json
+devbox.lock
+.devbox/
+
+# local docs
+PAGES.md
