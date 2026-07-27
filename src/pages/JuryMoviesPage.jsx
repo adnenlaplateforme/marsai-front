@@ -1,130 +1,40 @@
-import { useEffect, useState } from 'react';
-import { useApi } from '../hooks/useApi';
-import { useDebouncedCallback } from 'use-debounce';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import PaginationMenu from '../components/base/PaginationMenu';
-import TitlePage from '../components/base/TitlePage';
-import SortableTableHead from '../components/admin/base/SortableTableHead';
-import JuryMovieRow from '../components/jury/JuryMovieRow';
+import { useOutletContext } from 'react-router-dom';
+import { FiPlay } from 'react-icons/fi';
+
+// Placeholder — à remplacer par la vraie date de clôture (config / API).
+const DELIBERATION_DEADLINE = '15 JUIN 2026';
 
 function JuryMoviesPage() {
-  const [page, setPage] = useState(1);
-  const [isPageChange, setIsPageChange] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0);
-  const [sort, setSort] = useState('id');
-  const [order, setOrder] = useState('ASC');
-  const [search, setSearch] = useState('');
-  const [movies, setMovies] = useState([]);
-  const api = useApi();
-  const debounced = useDebouncedCallback(e => {
-    setSearch(e);
-    setIsPageChange(false);
-  }, 500);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        setLoading(true);
-        if (!isPageChange) {
-          setPage(1);
-          setIsPageChange(true);
-        }
-        const res = await api(
-          '/movies/sort/?page=' +
-            page +
-            '&sort=' +
-            sort +
-            '&order=' +
-            order +
-            '&onlyDrafts=false' +
-            '&search=' +
-            search
-        );
-        if (res && res.ok) {
-          const data = await res.json();
-          setMovies(data.data);
-          setTotal(data.total);
-        }
-      } catch (e) {
-        console.error('error: ', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
-  }, [page, sort, order, search, isPageChange, api]);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen gap-12 text-neutral-300">
-        <p>Chargement des films...</p>
-        <AiOutlineLoading3Quarters className="animate-spin size-24" />
-      </div>
-    );
-  }
+  const { toRateTotal } = useOutletContext();
 
   return (
-    <div className="text-white pt-20">
-      <TitlePage className="pt-5">Films en compétition</TitlePage>
-      <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center text-center px-6 py-16 max-w-2xl mx-auto">
+      <div className="size-24 rounded-full border-2 border-accent flex items-center justify-center mb-8">
+        <FiPlay className="size-10 text-accent ml-1" />
+      </div>
+
+      <h1 className="text-3xl md:text-4xl font-extrabold uppercase">
+        Prêt pour les délibérations ?
+      </h1>
+      <p className="text-neutral-400 mt-4 max-w-md">
+        Sélectionnez un film dans la file d&apos;attente à gauche pour commencer
+        le visionnage et attribuer une note.
+      </p>
+
+      <div className="flex gap-12 mt-12">
         <div>
-          <div className="pt-4 pb-1 flex-1 text-white">
-            <label htmlFor="searchbar" hidden>
-              Rechercher
-            </label>
-            <input
-              className="w-full outline-2 outline-neutral-400 rounded-sm pl-2 py-1.5 focus:outline-neutral-100"
-              id="searchbar"
-              type="text"
-              placeholder="Rechercher un film..."
-              onChange={e => debounced(e.target.value)}
-              title="search"
-              defaultValue={search}
-              autoFocus
-            />
-          </div>
+          <p className="text-4xl font-extrabold">{toRateTotal}</p>
+          <p className="text-xs uppercase tracking-wider text-neutral-400 mt-1">
+            Films à noter
+          </p>
         </div>
-        <table className="min-w-5/6">
-          <thead>
-            <tr>
-              <th className="lg:block"></th>
-              <th className="hidden lg:block">Affiche</th>
-              <SortableTableHead
-                value="english_title"
-                text="Titre"
-                sort={sort}
-                order={order}
-                setSort={setSort}
-                setOrder={setOrder}
-                setIsPageChange={setIsPageChange}
-              />
-              <SortableTableHead
-                value="c.lastname"
-                text="Réalisateur"
-                className="hidden lg:block"
-                sort={sort}
-                order={order}
-                setSort={setSort}
-                setOrder={setOrder}
-                setIsPageChange={setIsPageChange}
-              />
-              <th>Voter</th>
-            </tr>
-          </thead>
-          <tbody>
-            {movies.map((movie, index) => (
-              <JuryMovieRow key={index} data={movie} />
-            ))}
-          </tbody>
-        </table>
-        <div className="flex items-center justify-center">
-          <PaginationMenu
-            total={total}
-            page={page}
-            setPage={setPage}
-            setIsPageChange={setIsPageChange}
-          />
+        <div>
+          <p className="text-4xl font-extrabold text-accent">
+            {DELIBERATION_DEADLINE}
+          </p>
+          <p className="text-xs uppercase tracking-wider text-neutral-400 mt-1">
+            Clôture
+          </p>
         </div>
       </div>
     </div>
