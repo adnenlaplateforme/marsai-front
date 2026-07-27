@@ -2,36 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { FaStar } from 'react-icons/fa';
 import TitlePage from '../components/base/TitlePage';
 import toast from 'react-hot-toast';
-
-function StarRating({ value, onChange }) {
-  const [hovered, setHovered] = useState(0);
-
-  return (
-    <div className="flex gap-1 flex-wrap">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(star => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          onMouseEnter={() => setHovered(star)}
-          onMouseLeave={() => setHovered(0)}
-          className="text-2xl transition-colors"
-        >
-          <FaStar
-            className={
-              star <= (hovered || value)
-                ? 'text-yellow-400'
-                : 'text-neutral-600'
-            }
-          />
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function JuryRatingPage() {
   const { id } = useParams();
@@ -43,7 +15,7 @@ function JuryRatingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  const [note, setNote] = useState(0);
+  const [note, setNote] = useState(5);
   const [comment, setComment] = useState('');
 
   useEffect(() => {
@@ -56,7 +28,7 @@ function JuryRatingPage() {
         } else {
           setError('Film introuvable.');
         }
-      } catch (e) {
+      } catch {
         setError('Erreur de connexion au serveur.');
       } finally {
         setLoading(false);
@@ -67,10 +39,6 @@ function JuryRatingPage() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (note === 0) {
-      toast.error('Veuillez attribuer une note.');
-      return;
-    }
     try {
       setSubmitting(true);
       const res = await api(`/movies/${id}/ratings`, {
@@ -83,9 +51,9 @@ function JuryRatingPage() {
         navigate('/jury/dashboard/movies');
       } else {
         const data = await res.json().catch(() => ({}));
-        toast.error(data.message || 'Erreur lors de l\'envoi du vote.');
+        toast.error(data.message || "Erreur lors de l'envoi du vote.");
       }
-    } catch (e) {
+    } catch {
       toast.error('Erreur de connexion au serveur.');
     } finally {
       setSubmitting(false);
@@ -110,35 +78,40 @@ function JuryRatingPage() {
   }
 
   return (
-    <div className="text-white pt-20 px-4 max-w-2xl mx-auto">
+    <div className="text-white pt-20 px-4 max-w-3xl mx-auto pb-16">
       <TitlePage>Voter pour ce film</TitlePage>
 
-      <div className="mt-8 bg-secondary rounded-2xl p-6 border border-neutral-700">
-        <div className="flex gap-4 items-start mb-6">
-          {movie.cover_path && (
-            <img
-              src={movie.cover_path}
-              alt={movie.english_title}
-              className="w-24 rounded-xl object-cover flex-shrink-0"
-            />
+      <div className="mt-8 space-y-6">
+        {/* Header */}
+        <div>
+          <h2 className="text-2xl font-bold">{movie.english_title}</h2>
+          {movie.original_title && movie.original_title !== movie.english_title && (
+            <p className="text-neutral-400">{movie.original_title}</p>
           )}
-          <div>
-            <h2 className="text-2xl font-bold">{movie.english_title}</h2>
-            {movie.original_title && (
-              <p className="text-neutral-400">{movie.original_title}</p>
+          <div className="flex items-center gap-3 mt-2 text-sm text-neutral-400">
+            {movie.duration && <span>{movie.duration}s</span>}
+            {movie.is_hybrid !== undefined && (
+              <span>{movie.is_hybrid ? 'Hybrid' : '100% AI'}</span>
             )}
-            <div className="flex items-center gap-3 mt-2 text-sm text-neutral-400">
-              {movie.duration && <span>{movie.duration}s</span>}
-              {movie.is_hybrid !== undefined && (
-                <span>{movie.is_hybrid ? 'Hybrid' : '100% AI'}</span>
-              )}
-              {movie.language && <span>{movie.language}</span>}
-            </div>
+            {movie.language && <span>{movie.language}</span>}
           </div>
         </div>
 
+        {/* Video */}
+        <div className="rounded-xl overflow-hidden bg-black aspect-video">
+          <video
+            src={movie.video_path}
+            controls
+            poster={movie.cover_path}
+            className="w-full h-full object-contain"
+          >
+            Votre navigateur ne supporte pas la balise vidéo.
+          </video>
+        </div>
+
+        {/* Synopsis */}
         {movie.english_synopsis && (
-          <div className="mb-6 border-t border-neutral-700 pt-4">
+          <div className="bg-secondary rounded-2xl p-6 border border-neutral-700">
             <p className="text-sm text-neutral-400 uppercase mb-1">Synopsis</p>
             <p className="text-neutral-200 text-sm leading-relaxed">
               {movie.english_synopsis}
@@ -146,12 +119,35 @@ function JuryRatingPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 border-t border-neutral-700 pt-6">
+        {/* Vote */}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-secondary rounded-2xl p-6 border border-neutral-700 space-y-6"
+        >
           <div>
-            <label className="block text-sm uppercase text-neutral-400 mb-2">
-              Note (1-10)
-            </label>
-            <StarRating value={note} onChange={setNote} />
+            <div className="flex items-center justify-between mb-2">
+              <label htmlFor="note" className="block text-sm uppercase text-neutral-400">
+                Note
+              </label>
+              <span className="text-2xl font-bold text-accent">
+                {note}
+                <span className="text-base text-neutral-500">/10</span>
+              </span>
+            </div>
+            <input
+              id="note"
+              type="range"
+              min="1"
+              max="10"
+              step="1"
+              value={note}
+              onChange={e => setNote(Number(e.target.value))}
+              className="w-full accent-accent cursor-pointer"
+            />
+            <div className="flex justify-between text-xs text-neutral-500 mt-1">
+              <span>1</span>
+              <span>10</span>
+            </div>
           </div>
 
           <div>
@@ -174,7 +170,7 @@ function JuryRatingPage() {
           <div className="flex gap-3">
             <button
               type="submit"
-              disabled={submitting || note === 0}
+              disabled={submitting}
               className="flex-1 py-2.5 bg-accent text-white rounded-md font-semibold hover:opacity-90 disabled:opacity-40 transition-opacity"
             >
               {submitting ? (
