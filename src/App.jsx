@@ -14,20 +14,15 @@ import PublicLayout from './components/PublicLayout';
 import Newsletter from './components/admin/Newsletter';
 import EventsPage from './pages/EventsPage';
 import EventBookingPage from './pages/EventBookingPage';
-import { useContext, useEffect } from 'react';
-import marsaiLogo from './assets/marsai-logo.svg';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ProtectedRoute from './components/ProtectedRoute';
 import UnsubscribePage from './pages/UnsubscribePage';
 import MoviePage from './pages/MoviePage';
 import JuryRegisterPage from './pages/JuryRegisterPage';
-import AdminMovieTest from './pages/AdminMovieTest';
 import EditMoviePage from './pages/EditMoviePage';
 import JuryListPage from './pages/JuryListPage';
 import JuryPage from './pages/JuryPage';
 import JuryMoviesPage from './pages/JuryMoviesPage';
 import JuryRatingPage from './pages/JuryRatingPage';
-import { AuthContext } from './context/AuthContext';
 
 function App() {
   return (
@@ -36,10 +31,8 @@ function App() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/movies/:id" element={<MoviePage />} /> */}
           <Route path="/movies" element={<GalleryPage />} />
-          <Route path="/movies/:slug" element={<MoviePage />} />
-          {/* <Route path="/movies/:slug" element={<AdminMovieTest />} /> */}
+          <Route path="/movies/:idSlug" element={<MoviePage />} />
           <Route path="/submit" element={<SubmitMoviePage />} />
           <Route path="/submit/:token" element={<EditMoviePage />} />
           <Route path="/events" element={<EventsPage />} />
