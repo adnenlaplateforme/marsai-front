@@ -108,6 +108,9 @@ function LeaderboardRow({ movie }) {
           </div>
         </div>
       </td>
+      <td className="px-4 py-3 text-sm text-neutral-300 whitespace-nowrap hidden md:table-cell">
+        {movie.director?.country || '—'}
+      </td>
       <td className="px-4 py-3 whitespace-nowrap">
         <span className="text-lg font-bold tabular-nums">
           {formatAverage(movie.average)}
@@ -254,6 +257,9 @@ function LeaderboardManager() {
                 <tr className="text-left text-xs uppercase tracking-wider text-neutral-400">
                   <th className="px-4 py-2 font-medium">Rang</th>
                   <th className="px-4 py-2 font-medium">Film &amp; auteur</th>
+                  <th className="px-4 py-2 font-medium hidden md:table-cell">
+                    Pays
+                  </th>
                   <th className="px-4 py-2 font-medium">Moyenne</th>
                   <th className="px-4 py-2 font-medium">Votes</th>
                   <th className="px-4 py-2 font-medium hidden lg:table-cell">
