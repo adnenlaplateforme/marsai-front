@@ -1,40 +1,60 @@
 import { Link } from 'react-router-dom';
+import { FiChevronRight } from 'react-icons/fi';
+import { STATUS_BADGE, STATUS_LABELS } from './movieStatus';
+
+function directorName(director) {
+  return [director?.firstname, director?.lastname].filter(Boolean).join(' ');
+}
 
 function MovieRow({ data }) {
-  function dateDiffString(date1) {
-    let datediff = (new Date() - date1.getTime()) / (24 * 60 * 60 * 1000);
-
-    if (datediff > 1) {
-      return '' + Math.floor(datediff) + ' days';
-    } else return '' + Math.floor(datediff * 24) + ' hours';
-  }
+  const submittedAt = new Date(data.submitted_at);
+  const director = directorName(data.director);
 
   return (
-    <tr className="md:*:p-5 *:text-center relative">
-      <td className="absolute top-0 left-0 w-full h-full">
-        <Link
-          to={'/admin/movies/' + data.id + '-' + data.slug}
-          className="hover:bg-gray-400 hover:opacity-15 rounded-xl absolute top-0 left-0 w-full h-full"
-        ></Link>
-      </td>
-      <td className="hidden lg:block">
+    <tr className="border-t border-white/5 hover:bg-white/5 transition-colors">
+      <td className="px-4 py-3 hidden sm:table-cell">
         <img
-          className="md:max-w-20 rounded-xl bg-primary"
           src={data.cover_path}
           alt=""
+          className="size-14 rounded-lg object-cover bg-primary"
         />
       </td>
-      <td className="max-w-xs lg:max-w-md  lg:min-w-md truncate">
-        {data.english_title}
+      <td className="px-4 py-3">
+        <p className="font-bold uppercase text-sm truncate max-w-[16rem]">
+          {data.english_title}
+        </p>
+        {/* Le réalisateur a sa propre colonne à partir de md : en dessous, il
+            passe sous le titre plutôt que de disparaître. */}
+        <p className="text-xs text-neutral-400 truncate md:hidden">
+          {director}
+        </p>
       </td>
-      <td className="hidden lg:table-cell md:max-w-20">
-        {data.director.firstname}
-        <br />
-        {data.director.lastname}
+      <td className="px-4 py-3 text-sm text-neutral-300 whitespace-nowrap hidden md:table-cell">
+        {director || '—'}
       </td>
-      <td className="">{data.status}</td>
-      <td className="" title={new Date(data.submitted_at).toLocaleString()}>
-        {dateDiffString(new Date(data.submitted_at))}
+      <td className="px-4 py-3">
+        <span
+          className={`text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
+            STATUS_BADGE[data.status] ?? 'bg-neutral-600 text-white'
+          }`}
+        >
+          {STATUS_LABELS[data.status] ?? data.status}
+        </span>
+      </td>
+      <td
+        className="px-4 py-3 text-sm text-neutral-400 whitespace-nowrap tabular-nums"
+        title={submittedAt.toLocaleString('fr-FR')}
+      >
+        {submittedAt.toLocaleDateString('fr-FR')}
+      </td>
+      <td className="px-4 py-3 text-right">
+        <Link
+          to={'/admin/movies/' + data.id + '-' + data.slug}
+          aria-label={`Ouvrir la fiche de ${data.english_title}`}
+          className="inline-flex items-center justify-center size-9 rounded-lg border border-white/10 text-neutral-300 hover:text-white hover:border-accent transition-colors"
+        >
+          <FiChevronRight className="size-5" />
+        </Link>
       </td>
     </tr>
   );

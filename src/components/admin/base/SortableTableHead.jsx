@@ -12,7 +12,7 @@ function SortableTableHead({
   className = '',
 }) {
   return (
-    <th className={`p-4 ${className}`}>
+    <th className={`px-4 py-2 font-medium whitespace-nowrap ${className}`}>
       <div
         className="inline cursor-pointer"
         onClick={() => {
