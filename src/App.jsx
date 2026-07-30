@@ -7,6 +7,7 @@ import SubmitMoviePage from './pages/SubmitMoviePage';
 import AdminPage from './pages/AdminPage';
 import DashboardStats from './components/admin/DashboardStats';
 import MoviesManager from './pages/MoviesManager';
+import AdminMoviePage from './pages/AdminMoviePage';
 import JuryManager from './components/admin/JuryManager';
 import LeaderboardManager from './components/admin/LeaderboardManager';
 import EventsManager from './components/admin/EventsManager';
@@ -51,6 +52,7 @@ function App() {
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<DashboardStats />} />
             <Route path="movies" element={<MoviesManager />} />
+            <Route path="movies/:idSlug" element={<AdminMoviePage />} />
             <Route path="jury" element={<JuryManager />} />
             <Route path="leaderboard" element={<LeaderboardManager />} />
             <Route path="events" element={<EventsManager />} />

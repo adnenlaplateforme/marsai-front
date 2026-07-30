@@ -13,7 +13,7 @@ function MovieRow({ data }) {
     <tr className="md:*:p-5 *:text-center relative">
       <td className="absolute top-0 left-0 w-full h-full">
         <Link
-          to={'/movies/' + data.id + '-' + data.slug}
+          to={'/admin/movies/' + data.id + '-' + data.slug}
           className="hover:bg-gray-400 hover:opacity-15 rounded-xl absolute top-0 left-0 w-full h-full"
         ></Link>
       </td>

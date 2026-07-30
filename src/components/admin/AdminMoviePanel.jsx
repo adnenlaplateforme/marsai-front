@@ -1,27 +1,70 @@
-import { useState } from "react";
-import MovieStatusButton from "./base/MovieStatusButton";
+import { useState } from 'react';
+import { FiAlertTriangle } from 'react-icons/fi';
+import MovieStatusButton from './base/MovieStatusButton';
+import { ADMIN_ACTIONS, STATUS_BADGE, STATUS_LABELS } from './base/movieStatus';
 
 function AdminMoviePanel({ movie, setMovie }) {
-    const [textContent, setTextContent] = useState('');
+  const [textContent, setTextContent] = useState('');
 
+  return (
+    <div className="bg-secondary border border-white/10 rounded-xl p-5 text-white">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h2 className="text-sm font-bold uppercase tracking-wider">
+          Décision admin
+        </h2>
+        <span
+          className={`text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
+            STATUS_BADGE[movie.status] ?? 'bg-neutral-600 text-white'
+          }`}
+        >
+          {STATUS_LABELS[movie.status] ?? movie.status}
+        </span>
+      </div>
 
-    return (
-        <div className="flex flex-col bg-primary items-center text-white">
-            <p className="">Admin Panel</p>
-            <div className="flex flex-col text-white  w-5/7 items-center">
-                <textarea className="h-50 w-full bg-white text-black rounded-xl p-3" name=" admin-response" id="admin-response"
-                    // &#10; is newline
-                    value={textContent} placeholder="Administrator comment &#10;for Winner input won title" onChange={e => setTextContent(e.target.value)} ></textarea>
-                <div className="flex flex-row gap-5 my-2">
-                    <MovieStatusButton className="bg-green-500" text="Accept" newStatus="accepted" movie={movie} adminText={textContent} setMovie={setMovie} />
-                    <MovieStatusButton className="bg-orange-500" text="Change Needed" newStatus="pending_change" movie={movie} adminText={textContent} setMovie={setMovie} />
-                    <MovieStatusButton className="bg-red-500" text="Rejected" newStatus="rejected" movie={movie} adminText={textContent} setMovie={setMovie} />
-                    <MovieStatusButton className="bg-blue-500" text="Selected" newStatus="selected" movie={movie} adminText={textContent} setMovie={setMovie} />
-                    <MovieStatusButton className="bg-amber-300" text="Winner" newStatus="winner" movie={movie} adminText={textContent} setMovie={setMovie} />
-                </div>
-            </div >
-        </div>
-    );
+      <label
+        htmlFor="admin-comment"
+        className="block text-xs uppercase tracking-wider text-neutral-400 mb-2"
+      >
+        Commentaire (inséré dans l&apos;e-mail)
+      </label>
+      <textarea
+        id="admin-comment"
+        name="admin-comment"
+        rows={6}
+        value={textContent}
+        onChange={e => setTextContent(e.target.value)}
+        placeholder={
+          'Message pour le réalisateur.\nPour « Lauréat », indiquez le titre remporté.'
+        }
+        className="w-full bg-primary border border-white/10 rounded-lg p-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-accent resize-y"
+      />
+
+      <p className="flex items-start gap-2 text-xs text-neutral-400 mt-3">
+        <FiAlertTriangle className="size-4 flex-shrink-0 mt-0.5 text-orange-400" />
+        <span>
+          Chaque changement de statut envoie immédiatement un e-mail à{' '}
+          <span className="text-neutral-200">
+            {movie.director?.email ?? 'au réalisateur'}
+          </span>
+          . « Correction » y joint en plus un lien de modification de la fiche.
+        </span>
+      </p>
+
+      <div className="flex flex-wrap gap-3 mt-4">
+        {ADMIN_ACTIONS.map(action => (
+          <MovieStatusButton
+            key={action.status}
+            className={action.className}
+            text={action.label}
+            newStatus={action.status}
+            movie={movie}
+            adminText={textContent}
+            setMovie={setMovie}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default AdminMoviePanel;
