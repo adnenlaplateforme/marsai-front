@@ -485,17 +485,23 @@
   },
   "admin": {
     "moviesManager": {
+      "overline": "Admin management",
       "title": "Submitted Movies",
+      "subtitle": "Manage every submission to the festival.",
       "loading": "Loading...",
       "search": "Search",
-      "placeholder": "Search...",
+      "placeholder": "Search for a movie or a director",
       "draftsOnly": "Drafts Only",
+      "empty": "No movie submitted yet.",
+      "noResults": "No movie matches this search.",
+      "error": "Failed to load movies.",
+      "summary": "Page {{page}} of {{pages}} – {{total}} movies found",
       "table": {
         "cover": "Cover",
         "title": "Title",
         "director": "Director",
         "status": "Status",
-        "submitted": "Submitted"
+        "submitted": "Date"
       }
     }
   }

@@ -482,17 +482,23 @@
   },
   "admin": {
     "moviesManager": {
+      "overline": "Admin management",
       "title": "Films Soumis",
-      "loading": "Chargement en cour...",
+      "subtitle": "Gérez l'intégralité des soumissions du festival.",
+      "loading": "Chargement...",
       "search": "Recherche",
-      "placeholder": "Recherche...",
-      "draftsOnly": "Drafts Uniquement",
+      "placeholder": "Rechercher un film ou un réalisateur",
+      "draftsOnly": "Brouillons uniquement",
+      "empty": "Aucun film soumis pour l'instant.",
+      "noResults": "Aucun film ne correspond à cette recherche.",
+      "error": "Erreur lors de la récupération des films.",
+      "summary": "Page {{page}} sur {{pages}} – {{total}} films trouvés",
       "table": {
         "cover": "Affiche",
         "title": "Titre",
         "director": "Réalisateur",
-        "status": "Status",
-        "submitted": "Soumis"
+        "status": "Statut",
+        "submitted": "Date"
       }
     }
   }
