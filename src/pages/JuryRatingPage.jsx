@@ -30,7 +30,16 @@ function JuryRatingPage() {
         const res = await api(`/movies/${id}`);
         if (!alive) return;
         if (res && res.ok) {
-          setMovie(await res.json());
+          const data = await res.json();
+          // GET /movies/:id est public et sert tous les statuts. Le jury ne
+          // délibère que sur les films acceptés : l'API refuse la note (403),
+          // autant le dire ici plutôt que de laisser ouvrir le formulaire.
+          if (data.status !== 'accepted') {
+            setError("Ce film n'est pas ouvert à la notation.");
+            setLoading(false);
+            return;
+          }
+          setMovie(data);
         } else {
           setError('Film introuvable.');
           setLoading(false);
