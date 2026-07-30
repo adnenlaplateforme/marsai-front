@@ -1,8 +1,6 @@
 import { useParams } from "react-router";
 import TopPageTwo from "../components/base/TopPageTwo";
-import { useContext, useEffect, useState } from "react";
-import JuryMoviePanel from "../components/admin/JuryMoviePanel";
-import { AuthContext } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 
 function MoviePage() {
     const { idSlug } = useParams();
@@ -11,7 +9,6 @@ function MoviePage() {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { isJury } = useContext(AuthContext);
 
     useEffect(() => {
         if (!id || isNaN(Number(id))) {
@@ -167,8 +164,6 @@ function MoviePage() {
                 </p>
 
             </div>
-
-            {isJury && <JuryMoviePanel movie={data} />}
         </div>
     );
 }
