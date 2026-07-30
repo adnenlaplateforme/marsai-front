@@ -12,12 +12,17 @@ const FILTERS = [
   { key: 'all', label: 'Tous' },
 ];
 
-function endpointFor(filter, page, search) {
-  const s = encodeURIComponent(search);
-  if (filter === 'rated') return `/movies/rated?page=${page}&search=${s}`;
-  if (filter === 'to-rate') return `/movies/to-rate?page=${page}&search=${s}`;
-  return `/movies/sort/?page=${page}&sort=id&order=ASC&onlyDrafts=false&search=${s}`;
-}
+// « Tous » n'a pas d'endpoint à lui : c'est l'union des deux listes du jury.
+// Il passait par /movies/sort, désormais réservé à l'admin — cette route sert
+// la gestion des soumissions et expose tous les statuts, alors que le jury ne
+// délibère que sur les films acceptés. Les deux listes sont disjointes par
+// construction (« notés » = ceux où ce juré a une note, « à voir » = les
+// autres) : les concaténer ne peut pas produire de doublon.
+const ENDPOINTS = {
+  'to-rate': ['/movies/to-rate'],
+  rated: ['/movies/rated'],
+  all: ['/movies/to-rate', '/movies/rated'],
+};
 
 // Endpoints may return either a plain array or a { data, total } page.
 function normalizeList(json) {
@@ -33,58 +38,53 @@ function JuryPage() {
 
   const [filter, setFilter] = useState('to-rate');
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([]);
-  const [total, setTotal] = useState(0);
   const [toRateTotal, setToRateTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
 
   const fetchToRateTotal = useCallback(async () => {
-    const res = await api('/movies/to-rate?page=1&search=');
+    const res = await api('/movies/to-rate');
     if (res && res.ok) {
       setToRateTotal(normalizeList(await res.json()).total);
     }
   }, [api]);
 
-  const loadPage = useCallback(
-    async (nextPage, append) => {
-      try {
-        if (append) setLoadingMore(true);
-        else setLoading(true);
-        const res = await api(endpointFor(filter, nextPage, search));
-        if (res && res.ok) {
-          const { items, total: t } = normalizeList(await res.json());
-          setTotal(t);
-          setMovies(prev => (append ? [...prev, ...items] : items));
-          setPage(nextPage);
-        }
-      } catch (e) {
-        console.error('jury list error:', e);
-      } finally {
-        if (append) setLoadingMore(false);
-        else setLoading(false);
-      }
-    },
-    [api, filter, search]
-  );
+  // Ces deux endpoints n'acceptent aucun query param : ils renvoient toujours
+  // la liste complète des films acceptés. La recherche reste donc cliente.
+  const loadList = useCallback(async () => {
+    try {
+      setLoading(true);
+      const responses = await Promise.all(
+        ENDPOINTS[filter].map(url => api(url))
+      );
+      const lists = await Promise.all(
+        responses.map(async res =>
+          res && res.ok ? normalizeList(await res.json()).items : []
+        )
+      );
+      setMovies(lists.flat());
+    } catch (e) {
+      console.error('jury list error:', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [api, filter]);
 
   useEffect(() => {
-    loadPage(1, false);
-  }, [loadPage]);
+    loadList();
+  }, [loadList]);
 
   useEffect(() => {
     fetchToRateTotal();
   }, [fetchToRateTotal]);
 
   const refreshMovies = useCallback(() => {
-    loadPage(1, false);
+    loadList();
     fetchToRateTotal();
-  }, [loadPage, fetchToRateTotal]);
+  }, [loadList, fetchToRateTotal]);
 
   const debouncedSearch = useDebouncedCallback(v => setSearch(v), 400);
 
-  // Client-side safety net in case an endpoint doesn't filter server-side.
   const term = search.trim().toLowerCase();
   const visibleMovies = term
     ? movies.filter(m =>
@@ -93,8 +93,6 @@ function JuryPage() {
           .includes(term)
       )
     : movies;
-
-  const canLoadMore = !term && movies.length < total;
 
   return (
     <div className="min-h-screen bg-primary text-white pt-20">
@@ -106,7 +104,7 @@ function JuryPage() {
               File de visionnage
             </h2>
             <span className="text-xs font-bold bg-accent text-white px-2.5 py-1 rounded-full whitespace-nowrap">
-              {total} films
+              {visibleMovies.length} films
             </span>
           </div>
 
@@ -152,21 +150,7 @@ function JuryPage() {
                 Aucun film.
               </p>
             ) : (
-              <>
-                {visibleMovies.map(m => (
-                  <JuryMovieCard key={m.id} movie={m} />
-                ))}
-                {canLoadMore && (
-                  <button
-                    type="button"
-                    onClick={() => loadPage(page + 1, true)}
-                    disabled={loadingMore}
-                    className="w-full py-2 text-sm text-neutral-300 hover:text-white border border-white/10 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    {loadingMore ? 'Chargement...' : 'Charger plus'}
-                  </button>
-                )}
-              </>
+              visibleMovies.map(m => <JuryMovieCard key={m.id} movie={m} />)
             )}
           </div>
         </aside>
