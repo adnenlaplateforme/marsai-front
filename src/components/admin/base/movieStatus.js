@@ -20,6 +20,12 @@ export const STATUS_BADGE = {
   winner: 'bg-amber-300 text-black',
 };
 
+// Le périmètre du jury, miroir de `src/helpers/jury-visibility.ts` côté back.
+// Consultable est plus large que notable : un film noté puis promu par l'admin
+// reste dans la liste « Notés » du juré, en lecture seule.
+export const JURY_RATABLE_STATUS = 'accepted';
+export const JURY_VISIBLE_STATUSES = ['accepted', 'selected', 'winner'];
+
 export const ADMIN_ACTIONS = [
   { status: 'accepted', label: 'Accepter', className: 'bg-green-500' },
   {

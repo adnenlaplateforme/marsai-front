@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { FiGlobe } from 'react-icons/fi';
+import { FiGlobe, FiLock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import {
+  JURY_RATABLE_STATUS,
+  JURY_VISIBLE_STATUSES,
+  STATUS_LABELS,
+} from '../components/admin/base/movieStatus';
 
 function JuryRatingPage() {
   const { id } = useParams();
@@ -31,11 +36,11 @@ function JuryRatingPage() {
         if (!alive) return;
         if (res && res.ok) {
           const data = await res.json();
-          // GET /movies/:id est public et sert tous les statuts. Le jury ne
-          // délibère que sur les films acceptés : l'API refuse la note (403),
-          // autant le dire ici plutôt que de laisser ouvrir le formulaire.
-          if (data.status !== 'accepted') {
-            setError("Ce film n'est pas ouvert à la notation.");
+          // GET /movies/:id est public et sert tous les statuts. Hors du
+          // périmètre du jury, l'API refuse aussi la note en 403 : autant le
+          // dire ici plutôt que de laisser ouvrir un formulaire condamné.
+          if (!JURY_VISIBLE_STATUSES.includes(data.status)) {
+            setError('Ce film ne fait pas partie de la sélection du jury.');
             setLoading(false);
             return;
           }
@@ -84,6 +89,11 @@ function JuryRatingPage() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    // Le bouton d'envoi est masqué dans ce cas : ce garde couvre le `submit`
+    // qu'un champ ajouté plus tard déclencherait à la touche Entrée.
+    if (movie && movie.status !== JURY_RATABLE_STATUS) {
+      return;
+    }
     if (note === 0) {
       toast.error('Veuillez attribuer une note.');
       return;
@@ -126,6 +136,9 @@ function JuryRatingPage() {
     );
   }
 
+  // Consultable mais plus notable : l'admin a promu le film après le vote.
+  const closed = movie.status !== JURY_RATABLE_STATUS;
+
   const director = movie.director;
   const subtitle = [
     [director?.firstname, director?.lastname].filter(Boolean).join(' '),
@@ -165,6 +178,17 @@ function JuryRatingPage() {
           )}
         </div>
 
+        {closed && (
+          <p className="flex items-start gap-2 text-sm bg-primary border border-white/10 rounded-lg p-3 text-neutral-300">
+            <FiLock className="size-4 mt-0.5 flex-shrink-0 text-accent" />
+            <span>
+              Ce film est passé en «&nbsp;{STATUS_LABELS[movie.status]}&nbsp;» :
+              le vote y est clos. Votre note est conservée, mais n&apos;est plus
+              modifiable.
+            </span>
+          </p>
+        )}
+
         <div className="border-t border-white/10 pt-6">
           <div className="flex items-end justify-between">
             <div>
@@ -186,7 +210,8 @@ function JuryRatingPage() {
             step="1"
             value={note}
             onChange={e => setNote(Number(e.target.value))}
-            className="w-full mt-4 accent-accent cursor-pointer"
+            disabled={closed}
+            className="w-full mt-4 accent-accent cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           />
           <div className="flex justify-between text-xs text-neutral-500 mt-1 px-0.5">
             {Array.from({ length: 11 }, (_, i) => (
@@ -207,26 +232,29 @@ function JuryRatingPage() {
             rows={3}
             value={comment}
             onChange={e => setComment(e.target.value)}
-            className="w-full bg-primary border border-white/10 rounded-lg px-3 py-2 text-white placeholder-neutral-500 focus:outline-none focus:border-accent resize-none"
+            disabled={closed}
+            className="w-full bg-primary border border-white/10 rounded-lg px-3 py-2 text-white placeholder-neutral-500 focus:outline-none focus:border-accent resize-none disabled:opacity-50"
             placeholder="Vos observations sur ce film..."
           />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="flex-1 py-3 bg-accent text-white rounded-lg font-bold uppercase text-sm hover:opacity-90 disabled:opacity-40 transition-opacity"
-          >
-            {submitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <AiOutlineLoading3Quarters className="animate-spin" />
-                Envoi...
-              </span>
-            ) : (
-              'Valider ma note'
-            )}
-          </button>
+          {!closed && (
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 py-3 bg-accent text-white rounded-lg font-bold uppercase text-sm hover:opacity-90 disabled:opacity-40 transition-opacity"
+            >
+              {submitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+                  Envoi...
+                </span>
+              ) : (
+                'Valider ma note'
+              )}
+            </button>
+          )}
           <button
             type="button"
             onClick={goNext}
