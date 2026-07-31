@@ -500,6 +500,55 @@
         "status": "Statut",
         "submitted": "Date"
       }
+    },
+    "juryManager": {
+      "overline": "Admin management",
+      "title": "Distribution & jury",
+      "subtitle": "Gérez les lots de visionnage pour chaque membre du comité.",
+      "loading": "Chargement...",
+      "error": "Erreur lors de la récupération du jury.",
+      "addJury": "Ajouter des jurys",
+      "empty": "Aucun juré dans la base de données.",
+      "card": {
+        "noLot": "Lot non attribué",
+        "progress": "{{rated}}/{{assigned}} films",
+        "toggle": "Voir le lot de {{name}}",
+        "assigned": "Films attribués",
+        "rated": "Films notés",
+        "remaining": "Restants",
+        "pending": "Les lots de visionnage ne sont pas encore gérés côté serveur : ces compteurs resteront vides tant que l'attribution n'aura pas été livrée.",
+        "contact": "Contacter par e-mail"
+      },
+      "distribution": {
+        "title": "Distribution automatique",
+        "description": "L'algorithme répartit les {{movies}} films acceptés entre les {{juries}} jurés inscrits. Chaque film sera assigné à exactement {{evaluationsPerMovie}} membres pour garantir une double évaluation.",
+        "launch": "Lancer l'attribution",
+        "manual": "Mode manuel",
+        "unavailable": "Interface seule : l'attribution n'est pas encore disponible côté serveur.",
+        "noMovies": "Aucun film accepté à répartir pour l'instant.",
+        "notEnoughJuries": "Il faut au moins {{minimum}} jurés pour qu'un film soit évalué deux fois.",
+        "stats": {
+          "movies": "Films à répartir",
+          "juries": "Jurés inscrits",
+          "evaluations": "Évaluations à produire",
+          "perJury": "Films par juré",
+          "extraJuries_one": "dont {{count}} juré avec un film en plus",
+          "extraJuries_other": "dont {{count}} jurés avec un film en plus"
+        },
+        "dialog": {
+          "title": "Confirmer l'attribution",
+          "close": "Fermer",
+          "movies": "Films à répartir",
+          "juries": "Jurés inscrits",
+          "evaluations": "Évaluations à produire",
+          "perJury": "Films par juré",
+          "perJuryUneven_one": "{{perJury}} (+1 pour {{count}} juré)",
+          "perJuryUneven_other": "{{perJury}} (+1 pour {{count}} jurés)",
+          "pending": "L'attribution automatique n'existe pas encore côté serveur : cette confirmation ne crée aucun lot pour le moment.",
+          "cancel": "Annuler",
+          "confirm": "Confirmer"
+        }
+      }
     }
   }
 }

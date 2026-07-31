@@ -503,6 +503,55 @@
         "status": "Status",
         "submitted": "Date"
       }
+    },
+    "juryManager": {
+      "overline": "Admin management",
+      "title": "Distribution & jury",
+      "subtitle": "Manage the viewing batch of every committee member.",
+      "loading": "Loading...",
+      "error": "Failed to load the jury.",
+      "addJury": "Add jury members",
+      "empty": "No jury member in the database.",
+      "card": {
+        "noLot": "No batch assigned",
+        "progress": "{{rated}}/{{assigned}} movies",
+        "toggle": "Show {{name}}'s batch",
+        "assigned": "Movies assigned",
+        "rated": "Movies rated",
+        "remaining": "Remaining",
+        "pending": "Viewing batches are not handled by the server yet: these counters stay empty until the assignment feature ships.",
+        "contact": "Contact by email"
+      },
+      "distribution": {
+        "title": "Automatic distribution",
+        "description": "The algorithm splits the {{movies}} accepted movies between the {{juries}} registered jury members. Each movie will be assigned to exactly {{evaluationsPerMovie}} members to guarantee a double evaluation.",
+        "launch": "Start the assignment",
+        "manual": "Manual mode",
+        "unavailable": "Interface only: the assignment is not available on the server yet.",
+        "noMovies": "No accepted movie to split yet.",
+        "notEnoughJuries": "At least {{minimum}} jury members are required for a movie to be rated twice.",
+        "stats": {
+          "movies": "Movies to split",
+          "juries": "Registered jury",
+          "evaluations": "Evaluations to produce",
+          "perJury": "Movies per member",
+          "extraJuries_one": "including {{count}} member with one extra movie",
+          "extraJuries_other": "including {{count}} members with one extra movie"
+        },
+        "dialog": {
+          "title": "Confirm the assignment",
+          "close": "Close",
+          "movies": "Movies to split",
+          "juries": "Registered jury",
+          "evaluations": "Evaluations to produce",
+          "perJury": "Movies per member",
+          "perJuryUneven_one": "{{perJury}} (+1 for {{count}} member)",
+          "perJuryUneven_other": "{{perJury}} (+1 for {{count}} members)",
+          "pending": "Automatic assignment does not exist on the server yet: this confirmation creates no batch for now.",
+          "cancel": "Cancel",
+          "confirm": "Confirm"
+        }
+      }
     }
   }
 }
