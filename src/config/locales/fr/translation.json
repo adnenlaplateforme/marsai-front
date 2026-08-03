@@ -75,8 +75,14 @@
       "paragraph": "MARS.A.I exige une transparence totale sur l'utilisation de l'intelligence artificielle. Sélectionnez tous les outils génératifs sollicités dans votre processus créatif.",
       "isHybrid": {
         "title": "Classification de l'œuvre :* Choix exclusif entre :",
-        "false": ["Génération intégrale", "(100 % IA)"],
-        "true": ["Production hybride", "(Prises de vues réelles + apports IA)"]
+        "false": [
+          "Génération intégrale",
+          "(100 % IA)"
+        ],
+        "true": [
+          "Production hybride",
+          "(Prises de vues réelles + apports IA)"
+        ]
       },
       "aiTools": {
         "label": "Stack technologique *",
@@ -499,6 +505,71 @@
         "director": "Réalisateur",
         "status": "Statut",
         "submitted": "Date"
+      }
+    },
+    "juryManager": {
+      "overline": "Admin management",
+      "title": "Distribution & jury",
+      "subtitle": "Gérez les lots de visionnage pour chaque membre du comité.",
+      "loading": "Chargement...",
+      "error": "Erreur lors de la récupération du jury.",
+      "addJury": "Ajouter des jurys",
+      "empty": "Aucun juré dans la base de données.",
+      "card": {
+        "noLot": "Lot non attribué",
+        "progress": "{{rated}}/{{assigned}} films",
+        "toggle": "Voir le lot de {{name}}",
+        "assigned": "Films attribués",
+        "rated": "Films notés",
+        "remaining": "Restants",
+        "pending": "Aucun lot ne lui a encore été attribué : lancez l'attribution depuis le panneau ci-dessous.",
+        "contact": "Contacter par e-mail"
+      },
+      "distribution": {
+        "title": "Distribution automatique",
+        "description": "L'algorithme répartit les {{movies}} films acceptés entre les {{juries}} jurés inscrits. Chaque film sera assigné à {{evaluationsPerMovie}} membres pour garantir une évaluation croisée.",
+        "doneDescription": "Les lots sont attribués et répartis entre les {{juries}} jurés. Chacun ne voit désormais que les films de son lot.",
+        "launch": "Lancer l'attribution",
+        "reset": "Réinitialiser l'attribution",
+        "manual": "Mode manuel",
+        "manualUnavailable": "Le mode manuel attend une route listant les films d'un lot : sans elle, le retrait se ferait à l'aveugle.",
+        "noMovies": "Aucun film accepté à répartir pour l'instant.",
+        "notEnoughJuries": "Il faut au moins {{minimum}} jurés pour qu'un film soit évalué deux fois.",
+        "uncovered_one": "{{count}} film accepté n'a pas atteint deux jurés — sans doute accepté après l'attribution. Rattrapez-le à la main ou réinitialisez.",
+        "uncovered_other": "{{count}} films acceptés n'ont pas atteint deux jurés — sans doute acceptés après l'attribution. Rattrapez-les à la main ou réinitialisez.",
+        "errors": {
+          "conflict": "Les films sont déjà attribués. Réinitialisez l'attribution avant d'en lancer une nouvelle.",
+          "generic": "L'attribution a échoué. Réessayez dans un instant."
+        },
+        "stats": {
+          "movies": "Films à répartir",
+          "juries": "Jurés inscrits",
+          "evaluations": "Évaluations à produire",
+          "perJury": "Films par juré",
+          "assigned": "Films attribués",
+          "rated": "Films notés",
+          "uncovered": "Films sans juré",
+          "extraJuries_one": "dont {{count}} juré avec un film en plus",
+          "extraJuries_other": "dont {{count}} jurés avec un film en plus"
+        },
+        "dialog": {
+          "title": "Confirmer l'attribution",
+          "resetTitle": "Réinitialiser l'attribution",
+          "close": "Fermer",
+          "movies": "Films à répartir",
+          "juries": "Jurés inscrits",
+          "evaluations": "Évaluations à produire",
+          "perJury": "Films par juré",
+          "perJuryUneven_one": "{{perJury}} (+1 pour {{count}} juré)",
+          "perJuryUneven_other": "{{perJury}} (+1 pour {{count}} jurés)",
+          "resetBody_one": "{{count}} attribution va être supprimée. Chaque juré retrouvera une file vide jusqu'à la prochaine attribution.",
+          "resetBody_other": "{{count}} attributions vont être supprimées. Chaque juré retrouvera une file vide jusqu'à la prochaine attribution.",
+          "notice": "L'attribution ne se lance qu'une fois : pour la refaire, il faudra d'abord la réinitialiser.",
+          "resetNotice": "Les notes déjà posées ne sont pas effacées : seuls les lots le sont.",
+          "cancel": "Annuler",
+          "confirm": "Confirmer",
+          "submitting": "En cours..."
+        }
       }
     }
   }
