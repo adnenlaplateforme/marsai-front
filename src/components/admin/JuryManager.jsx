@@ -8,6 +8,19 @@ import JuryDistributionPanel from './JuryDistributionPanel';
 import JuryCard from './base/JuryCard';
 import { JURY_RATABLE_STATUS } from './base/movieStatus';
 
+/**
+ * L'avancement d'un juré, ou `null` s'il n'est pas encore connu.
+ *
+ * `GET /jury-assignments` désigne les jurés par `user_id` — la même personne que
+ * le `id` de `GET /juries`, deux vues d'une seule table `user`. Un juré absent
+ * de la réponse rend `null` plutôt que des zéros : la carte affiche alors « lot
+ * non attribué » au lieu d'une barre à 0 %, qui laisserait croire à un lot vide
+ * plutôt qu'à une absence de lot.
+ */
+function progressFor(assignment, juryId) {
+  return assignment?.juries?.find(jury => jury.user_id === juryId) ?? null;
+}
+
 function JuryManager() {
   const { t } = useTranslation();
   const target = 'admin.juryManager.';
@@ -18,6 +31,11 @@ function JuryManager() {
   // en échec ne se ressemblent pas, et le panneau de distribution ne doit pas
   // annoncer « aucun film à répartir » sur une erreur réseau.
   const [movieCount, setMovieCount] = useState(null);
+  // L'état de l'attribution, `null` tant qu'il n'est pas lu — même raison que
+  // `movieCount` : « rien d'attribué » et « appel en échec » ne se ressemblent
+  // pas, et le panneau ne doit pas proposer de lancer une attribution qui a
+  // peut-être déjà eu lieu.
+  const [assignment, setAssignment] = useState(null);
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,10 +65,20 @@ function JuryManager() {
     );
   }, [api]);
 
+  // L'avancement de chaque juré, plus le nombre de films acceptés qu'aucun lot
+  // ne couvre. Les deux viennent de la même route : `assigned` et `rated` par
+  // juré alimentent les cartes, `unassigned` alerte l'admin sur un film accepté
+  // après l'attribution.
+  const fetchAssignment = useCallback(async () => {
+    const res = await api('/jury-assignments');
+    if (!res || !res.ok) throw new Error('assignment');
+    setAssignment(await res.json());
+  }, [api]);
+
   const load = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchJuries(), fetchMovieCount()]);
+      await Promise.all([fetchJuries(), fetchMovieCount(), fetchAssignment()]);
       setError(null);
     } catch (e) {
       console.error('jury manager error: ', e);
@@ -58,7 +86,7 @@ function JuryManager() {
     } finally {
       setLoading(false);
     }
-  }, [fetchJuries, fetchMovieCount, t]);
+  }, [fetchJuries, fetchMovieCount, fetchAssignment, t]);
 
   useEffect(() => {
     load();
@@ -110,15 +138,21 @@ function JuryManager() {
           ) : (
             <div className="space-y-3">
               {juries.map(jury => (
-                <JuryCard key={jury.id} jury={jury} />
+                <JuryCard
+                  key={jury.id}
+                  jury={jury}
+                  progress={progressFor(assignment, jury.id)}
+                />
               ))}
             </div>
           )}
 
-          {movieCount !== null && (
+          {movieCount !== null && assignment !== null && (
             <JuryDistributionPanel
               movieCount={movieCount}
               juryCount={juries.length}
+              assignment={assignment}
+              onChange={load}
             />
           )}
         </>

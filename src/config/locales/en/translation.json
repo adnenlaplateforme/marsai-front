@@ -75,7 +75,10 @@
       "paragraph": "MARS.A.I requires full transparency regarding the use of Artificial Intelligence. Please select all generative tools used in your creative process.",
       "isHybrid": {
         "title": "Work Classification:* Exclusive choice between:",
-        "false": ["Fully generated", "(100% AI)"],
+        "false": [
+          "Fully generated",
+          "(100% AI)"
+        ],
         "true": [
           "Hybrid production",
           "(Live-action footage + AI contributions)"
@@ -519,27 +522,39 @@
         "assigned": "Movies assigned",
         "rated": "Movies rated",
         "remaining": "Remaining",
-        "pending": "Viewing batches are not handled by the server yet: these counters stay empty until the assignment feature ships.",
+        "pending": "No batch has been assigned to them yet: start the assignment from the panel below.",
         "contact": "Contact by email"
       },
       "distribution": {
         "title": "Automatic distribution",
-        "description": "The algorithm splits the {{movies}} accepted movies between the {{juries}} registered jury members. Each movie will be assigned to exactly {{evaluationsPerMovie}} members to guarantee a double evaluation.",
+        "description": "The algorithm splits the {{movies}} accepted movies between the {{juries}} registered jury members. Each movie will be assigned to {{evaluationsPerMovie}} members to guarantee a cross evaluation.",
+        "doneDescription": "Batches are assigned and split between the {{juries}} jury members. Each of them now only sees the movies in their own batch.",
         "launch": "Start the assignment",
+        "reset": "Reset the assignment",
         "manual": "Manual mode",
-        "unavailable": "Interface only: the assignment is not available on the server yet.",
+        "manualUnavailable": "Manual mode is waiting for a route listing the movies of a batch: without it, removals would be blind.",
         "noMovies": "No accepted movie to split yet.",
         "notEnoughJuries": "At least {{minimum}} jury members are required for a movie to be rated twice.",
+        "uncovered_one": "{{count}} accepted movie did not reach two jury members — likely accepted after the assignment. Fix it manually or reset.",
+        "uncovered_other": "{{count}} accepted movies did not reach two jury members — likely accepted after the assignment. Fix them manually or reset.",
+        "errors": {
+          "conflict": "Movies are already assigned. Reset the assignment before starting a new one.",
+          "generic": "The assignment failed. Please try again in a moment."
+        },
         "stats": {
           "movies": "Movies to split",
           "juries": "Registered jury",
           "evaluations": "Evaluations to produce",
           "perJury": "Movies per member",
+          "assigned": "Movies assigned",
+          "rated": "Movies rated",
+          "uncovered": "Movies without jury",
           "extraJuries_one": "including {{count}} member with one extra movie",
           "extraJuries_other": "including {{count}} members with one extra movie"
         },
         "dialog": {
           "title": "Confirm the assignment",
+          "resetTitle": "Reset the assignment",
           "close": "Close",
           "movies": "Movies to split",
           "juries": "Registered jury",
@@ -547,9 +562,13 @@
           "perJury": "Movies per member",
           "perJuryUneven_one": "{{perJury}} (+1 for {{count}} member)",
           "perJuryUneven_other": "{{perJury}} (+1 for {{count}} members)",
-          "pending": "Automatic assignment does not exist on the server yet: this confirmation creates no batch for now.",
+          "resetBody_one": "{{count}} assignment will be deleted. Every jury member will get an empty queue until the next assignment.",
+          "resetBody_other": "{{count}} assignments will be deleted. Every jury member will get an empty queue until the next assignment.",
+          "notice": "The assignment runs only once: to redo it, you will have to reset it first.",
+          "resetNotice": "Ratings already submitted are not deleted: only the batches are.",
           "cancel": "Cancel",
-          "confirm": "Confirm"
+          "confirm": "Confirm",
+          "submitting": "Working..."
         }
       }
     }
