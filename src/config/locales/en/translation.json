@@ -75,10 +75,7 @@
       "paragraph": "MARS.A.I requires full transparency regarding the use of Artificial Intelligence. Please select all generative tools used in your creative process.",
       "isHybrid": {
         "title": "Work Classification:* Exclusive choice between:",
-        "false": [
-          "Fully generated",
-          "(100% AI)"
-        ],
+        "false": ["Fully generated", "(100% AI)"],
         "true": [
           "Hybrid production",
           "(Live-action footage + AI contributions)"
@@ -523,7 +520,19 @@
         "rated": "Movies rated",
         "remaining": "Remaining",
         "pending": "No batch has been assigned to them yet: start the assignment from the panel below.",
-        "contact": "Contact by email"
+        "contact": "Contact by email",
+        "delete": "Delete jury member",
+        "deleteDialog": {
+          "title": "Delete {{name}}?",
+          "close": "Close",
+          "body": "This jury member's account will be deleted, along with their viewing batch.",
+          "ratings": "Their ratings will be erased too: the average of the movies they rated will change, and their vote will no longer count towards the leaderboard.",
+          "notice": "This action cannot be undone.",
+          "cancel": "Cancel",
+          "confirm": "Confirm deletion",
+          "submitting": "Deleting...",
+          "error": "Deletion failed."
+        }
       },
       "distribution": {
         "title": "Automatic distribution",
