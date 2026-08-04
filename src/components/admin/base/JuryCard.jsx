@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiChevronRight, FiMail } from 'react-icons/fi';
+import { FiChevronRight, FiMail, FiTrash2 } from 'react-icons/fi';
+import { IoMdClose } from 'react-icons/io';
+import { useApi } from '../../../hooks/useApi';
 
 function juryName(jury) {
   const name = [jury?.firstname, jury?.lastname].filter(Boolean).join(' ');
@@ -17,10 +19,50 @@ function juryName(jury) {
  * plutôt que des chiffres inventés — le jour où la route existe, il suffit de
  * lui passer `{ assigned, rated }`.
  */
-function JuryCard({ jury, progress = null }) {
+function JuryCard({ jury, progress = null, onDeleted = () => {} }) {
   const { t } = useTranslation();
   const target = 'admin.juryManager.card.';
+  const api = useApi();
   const [isOpen, setIsOpen] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState(null);
+
+  /**
+   * Supprime le juré, puis laisse le parent recharger la liste.
+   *
+   * `onDeleted` n'est appelé que sur un succès : la carte ne se retire pas
+   * d'elle-même. Prévenir le parent sur un échec le ferait recharger, et la
+   * liste reviendrait avec le juré toujours là — l'admin y lirait un bug plutôt
+   * qu'un refus.
+   *
+   * Le message du serveur est repris tel quel, comme dans le panneau de
+   * distribution : c'est lui qui sait pourquoi il refuse.
+   */
+  async function remove() {
+    setIsDeleting(true);
+    setError(null);
+    try {
+      const res = await api(`/juries/${jury.id}`, { method: 'DELETE' });
+
+      // `useApi` renvoie null quand la session est morte : il a déjà déconnecté.
+      if (!res) return;
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setError(body?.message || t(target + 'deleteDialog.error'));
+        return;
+      }
+
+      setIsConfirming(false);
+      onDeleted();
+    } catch (e) {
+      console.error('jury delete error: ', e);
+      setError(t(target + 'deleteDialog.error'));
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   const name = juryName(jury);
   const assigned = progress?.assigned ?? null;
@@ -104,16 +146,136 @@ function JuryCard({ jury, progress = null }) {
             <p className="text-xs text-neutral-400">{t(target + 'pending')}</p>
           )}
 
-          <a
-            href={`mailto:${jury.email}`}
-            className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-accent transition-colors"
-          >
-            <FiMail className="size-4" />
-            {t(target + 'contact')}
-          </a>
+          {/* La suppression est rangée dans le détail, et non sur la ligne : il
+              faut avoir ouvert la carte — donc regardé de qui il s'agit — pour
+              l'atteindre. Un bouton rouge en bout de ligne se clique de
+              travers, et celui-ci efface des notes. */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <a
+              href={`mailto:${jury.email}`}
+              className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-accent transition-colors"
+            >
+              <FiMail className="size-4" />
+              {t(target + 'contact')}
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setIsConfirming(true)}
+              className="inline-flex items-center gap-2 text-sm text-red-300 border border-red-500/40 hover:bg-red-500/10 rounded-lg px-3 py-1.5 transition-colors cursor-pointer"
+            >
+              <FiTrash2 className="size-4" />
+              {t(target + 'delete')}
+            </button>
+          </div>
         </div>
       )}
+
+      {isConfirming && (
+        <DeleteDialog
+          name={name}
+          error={error}
+          isDeleting={isDeleting}
+          onConfirm={remove}
+          onClose={() => {
+            setIsConfirming(false);
+            setError(null);
+          }}
+        />
+      )}
     </article>
+  );
+}
+
+/**
+ * La confirmation de suppression.
+ *
+ * Elle dit explicitement que les notes du juré s'en vont, parce que le panneau
+ * de distribution promet l'inverse à quelques centimètres de là — « les notes
+ * déjà posées ne sont pas effacées » — et qu'un admin qui vient de lire cette
+ * phrase n'a aucune raison de deviner que la règle change ici. Le classement se
+ * calcule sur ces notes : les taire ferait bouger un résultat sans témoin.
+ */
+function DeleteDialog({ name, error, isDeleting, onConfirm, onClose }) {
+  const { t } = useTranslation();
+  const target = 'admin.juryManager.card.deleteDialog.';
+
+  useEffect(() => {
+    const onKeyDown = e => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed left-0 top-0 h-full w-full flex items-center justify-center bg-neutral-900/50 backdrop-blur-sm z-50 p-4"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="jury-delete-dialog-title"
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-lg bg-secondary border border-neutral-700 rounded-lg shadow-xl p-6 space-y-5"
+      >
+        <div className="flex justify-between items-center border-b border-neutral-700 pb-4">
+          <h3
+            id="jury-delete-dialog-title"
+            className="font-bold uppercase tracking-wide"
+          >
+            {t(target + 'title', { name })}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t(target + 'close')}
+            className="hover:text-accent transition-colors cursor-pointer"
+          >
+            <IoMdClose size={24} />
+          </button>
+        </div>
+
+        <p className="text-sm text-neutral-300">{t(target + 'body')}</p>
+
+        <p className="text-sm text-amber-300 bg-amber-300/10 border border-amber-300/30 rounded-lg p-3">
+          {t(target + 'ratings')}
+        </p>
+
+        <p className="text-xs text-neutral-400 bg-white/5 border border-white/10 rounded-lg p-3">
+          {t(target + 'notice')}
+        </p>
+
+        {error && (
+          <p
+            role="alert"
+            className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg p-3"
+          >
+            {error}
+          </p>
+        )}
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isDeleting}
+            className="flex-1 border border-white/20 text-neutral-300 hover:text-white font-bold py-2.5 rounded-md transition-colors disabled:opacity-40 cursor-pointer"
+          >
+            {t(target + 'cancel')}
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isDeleting}
+            className="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {isDeleting ? t(target + 'submitting') : t(target + 'confirm')}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

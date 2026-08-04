@@ -142,6 +142,11 @@ function JuryManager() {
                   key={jury.id}
                   jury={jury}
                   progress={progressFor(assignment, jury.id)}
+                  // `load` et non un simple retrait de la liste : supprimer un
+                  // juré change aussi l'attribution et le nombre de films
+                  // couverts. Relire les trois routes garde le panneau de
+                  // distribution d'accord avec les cartes.
+                  onDeleted={load}
                 />
               ))}
             </div>

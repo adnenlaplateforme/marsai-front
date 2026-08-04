@@ -75,14 +75,8 @@
       "paragraph": "MARS.A.I exige une transparence totale sur l'utilisation de l'intelligence artificielle. Sélectionnez tous les outils génératifs sollicités dans votre processus créatif.",
       "isHybrid": {
         "title": "Classification de l'œuvre :* Choix exclusif entre :",
-        "false": [
-          "Génération intégrale",
-          "(100 % IA)"
-        ],
-        "true": [
-          "Production hybride",
-          "(Prises de vues réelles + apports IA)"
-        ]
+        "false": ["Génération intégrale", "(100 % IA)"],
+        "true": ["Production hybride", "(Prises de vues réelles + apports IA)"]
       },
       "aiTools": {
         "label": "Stack technologique *",
@@ -523,7 +517,19 @@
         "rated": "Films notés",
         "remaining": "Restants",
         "pending": "Aucun lot ne lui a encore été attribué : lancez l'attribution depuis le panneau ci-dessous.",
-        "contact": "Contacter par e-mail"
+        "contact": "Contacter par e-mail",
+        "delete": "Supprimer le juré",
+        "deleteDialog": {
+          "title": "Supprimer {{name}} ?",
+          "close": "Fermer",
+          "body": "Le compte de ce juré va être supprimé, ainsi que son lot de visionnage.",
+          "ratings": "Ses notes seront elles aussi effacées : la moyenne des films qu'il a notés changera, et son avis ne comptera plus dans le classement.",
+          "notice": "Cette action est irréversible.",
+          "cancel": "Annuler",
+          "confirm": "Confirmer la suppression",
+          "submitting": "Suppression...",
+          "error": "La suppression a échoué."
+        }
       },
       "distribution": {
         "title": "Distribution automatique",
