@@ -9,21 +9,22 @@ import {
 } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { useApi } from '../../../hooks/useApi';
+import ParticipantsDialog from './ParticipantsDialog';
 import { seatsTaken, timeRange } from './eventSchedule';
 
 /**
  * Une carte du planning : un créneau, ce qui s'y joue, et où.
  *
- * La maquette pose deux actions au bas de la carte — la liste des participants
- * et la modification. Aucune des deux n'a de quoi fonctionner aujourd'hui : rien
- * ne liste les réservations d'un événement côté serveur, et le seul formulaire
- * existant crée. Elles restent affichées, désactivées, avec la raison en clair :
- * un admin doit pouvoir distinguer « pas encore livré » de « en panne ».
+ * La maquette pose deux actions au bas de la carte. La liste des participants
+ * est branchée sur `GET /events/:id/bookings` ; la modification attend encore
+ * son formulaire et reste affichée, désactivée, avec la raison en clair — un
+ * admin doit pouvoir distinguer « pas encore livré » de « en panne ».
  */
 function EventCard({ event, onDeleted = () => {} }) {
   const { t, i18n } = useTranslation();
   const target = 'admin.eventsManager.card.';
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isListing, setIsListing] = useState(false);
 
   const taken = seatsTaken(event);
   const remaining = taken === null ? null : Number(event.capacity) - taken;
@@ -80,13 +81,16 @@ function EventCard({ event, onDeleted = () => {} }) {
       </p>
 
       <div className="flex flex-wrap items-center gap-3 pt-1">
-        <UnavailableAction
-          id={`event-participants-${event.id}`}
-          icon={<FiDownload className="size-4" />}
-          label={t(target + 'participants')}
-          reason={t(target + 'participantsUnavailable')}
-          className="border border-white/20 text-neutral-300"
-        />
+        {/* Le panneau n'est monté qu'au clic : il charge ses inscrits à
+            l'ouverture, et le programme d'une journée compte plusieurs cartes. */}
+        <button
+          type="button"
+          onClick={() => setIsListing(true)}
+          className="inline-flex items-center gap-2 text-sm uppercase tracking-wider font-bold border border-white/20 text-neutral-300 hover:bg-white/5 rounded-lg px-4 py-2 transition-colors cursor-pointer"
+        >
+          <FiDownload className="size-4" aria-hidden="true" />
+          {t(target + 'participants')}
+        </button>
         <UnavailableAction
           id={`event-edit-${event.id}`}
           icon={<FiEdit2 className="size-4" />}
@@ -104,6 +108,13 @@ function EventCard({ event, onDeleted = () => {} }) {
           {t(target + 'delete')}
         </button>
       </div>
+
+      {isListing && (
+        <ParticipantsDialog
+          event={event}
+          onClose={() => setIsListing(false)}
+        />
+      )}
 
       {isConfirming && (
         <DeleteDialog

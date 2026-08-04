@@ -82,23 +82,40 @@ it('ne signale rien quand la traduction est celle de l’interface', () => {
 });
 
 /**
- * Les deux actions de la maquette que rien ne sert encore : la liste des
- * participants n'a pas de route, le formulaire d'édition n'existe pas. Elles
- * restent à leur place, désactivées et motivées — comme le « mode manuel » du
- * panneau de distribution — plutôt que de promettre un clic sans effet.
+ * La dernière action de la maquette que rien ne sert encore : le formulaire
+ * d'édition n'existe pas. Elle reste à sa place, désactivée et motivée — comme
+ * le « mode manuel » du panneau de distribution — plutôt que de promettre un
+ * clic sans effet.
  */
-it('désactive les participants et la modification en donnant la raison', () => {
+it('désactive la modification en donnant la raison', () => {
+  render(<EventCard event={workshop} />);
+
+  const edit = screen.getByRole('button', { name: /Modifier/ });
+
+  expect(edit).toBeDisabled();
+  expect(edit).toHaveAccessibleDescription(/formulaire/i);
+});
+
+it('ouvre la liste des participants sans rien charger avant le clic', async () => {
+  const user = userEvent.setup();
+  api.mockResolvedValue({ ok: true, status: 200, json: async () => [] });
   render(<EventCard event={workshop} />);
 
   const participants = screen.getByRole('button', {
     name: /Liste participants/,
   });
-  const edit = screen.getByRole('button', { name: /Modifier/ });
+  expect(participants).toBeEnabled();
+  // Une carte par créneau : charger les inscrits de chacune à l'affichage
+  // ferait une requête par atelier du programme pour un panneau que l'admin
+  // n'ouvrira peut-être jamais.
+  expect(api).not.toHaveBeenCalled();
 
-  expect(participants).toBeDisabled();
-  expect(participants).toHaveAccessibleDescription(/route/i);
-  expect(edit).toBeDisabled();
-  expect(edit).toHaveAccessibleDescription(/formulaire/i);
+  await user.click(participants);
+
+  expect(await screen.findByRole('dialog')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(api).toHaveBeenCalledWith('/events/3/bookings')
+  );
 });
 
 it('ne supprime rien tant que la confirmation n’est pas donnée', async () => {
