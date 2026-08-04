@@ -30,6 +30,10 @@ function EventsManager() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Les réservations posées aujourd'hui, `null` tant qu'on ne les a pas. Le
+  // planning ne sait pas les calculer : `remaining_seats` dit combien de places
+  // sont parties, jamais quand.
+  const [today, setToday] = useState(null);
   // La journée choisie à la main, `null` tant que l'admin n'a rien cliqué : la
   // page ouvre alors la journée en cours, et suit le programme s'il change.
   const [pickedDay, setPickedDay] = useState(null);
@@ -60,6 +64,35 @@ function EventsManager() {
   useEffect(() => {
     load();
   }, [load]);
+
+  /**
+   * Le compteur du jour, lu à part du planning.
+   *
+   * Il ne sert qu'une mention sous un chiffre déjà affiché : le fondre dans le
+   * `Promise.all` ci-dessus viderait tout le programme pour un compteur
+   * manquant. Un échec se contente donc de laisser `today` à `null`, et la
+   * tuile reprend la mention d'origine.
+   */
+  useEffect(() => {
+    let abandoned = false;
+
+    async function loadStats() {
+      try {
+        const res = await api('/bookings/stats');
+        if (!res || !res.ok || abandoned) return;
+
+        const stats = await res.json();
+        if (!abandoned) setToday(stats.today);
+      } catch (e) {
+        console.error('bookings stats error: ', e);
+      }
+    }
+
+    loadStats();
+    return () => {
+      abandoned = true;
+    };
+  }, [api]);
 
   const stats = useMemo(() => scheduleStats(events), [events]);
   const days = useMemo(() => groupByDay(events), [events]);
@@ -109,10 +142,16 @@ function EventsManager() {
               iconClass="bg-primary text-neutral-200"
               label={t(target + 'stats.bookings')}
               value={stats.bookings}
+              // Le « +12 aujourd'hui » de la maquette dès que le serveur le
+              // donne ; à défaut, la mention d'origine plutôt qu'un vide.
               hint={
-                stats.workshops > 0
-                  ? t(target + 'stats.bookingsHint', { count: stats.workshops })
-                  : t(target + 'stats.noWorkshop')
+                today !== null
+                  ? t(target + 'stats.today', { count: today })
+                  : stats.workshops > 0
+                    ? t(target + 'stats.bookingsHint', {
+                        count: stats.workshops,
+                      })
+                    : t(target + 'stats.noWorkshop')
               }
             />
             <StatCard
