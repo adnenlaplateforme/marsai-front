@@ -577,6 +577,51 @@
           "submitting": "En cours..."
         }
       }
+    },
+    "eventsManager": {
+      "overline": "Event management",
+      "title": "Planning & Workshops",
+      "subtitle": "Gérez l'agenda du festival à Marseille et le flux des participants.",
+      "loading": "Chargement...",
+      "error": "Erreur lors de la récupération des événements.",
+      "empty": "Aucun événement au programme pour l'instant.",
+      "addEvent": "Ajouter un événement",
+      "stats": {
+        "bookings": "Réservations totales",
+        "bookingsHint_one": "sur {{count}} atelier réservable",
+        "bookingsHint_other": "sur {{count}} ateliers réservables",
+        "fillRate": "Taux de remplissage",
+        "fillRateHint": "Sur l'ensemble des ateliers",
+        "noWorkshop": "Aucun atelier réservable au programme"
+      },
+      "days": {
+        "label": "Journées du festival"
+      },
+      "card": {
+        "registrations": "Nombre d'inscriptions : {{taken}}",
+        "remaining": "{{remaining}} places restantes",
+        "full": "Complet",
+        "free": "Entrée libre, sans réservation",
+        "otherLang": "Cet événement n'existe qu'en {{lang}} : la traduction française manque.",
+        "participants": "Liste participants",
+        "participantsUnavailable": "La liste des participants attend une route côté serveur : aucune ne dit encore qui a réservé.",
+        "edit": "Modifier",
+        "editUnavailable": "Le formulaire d'édition n'est pas encore branché : seule la création l'est.",
+        "delete": "Supprimer l'événement",
+        "deleteDialog": {
+          "title": "Supprimer {{title}} ?",
+          "close": "Fermer",
+          "body": "L'événement va être retiré du programme, dans toutes ses traductions.",
+          "bookings_one": "{{count}} réservation sera effacée avec lui, sans que le participant en soit averti.",
+          "bookings_other": "{{count}} réservations seront effacées avec lui, sans que les participants en soient avertis.",
+          "noBookings": "Personne n'a réservé cet événement.",
+          "notice": "Cette action est irréversible.",
+          "cancel": "Annuler",
+          "confirm": "Confirmer la suppression",
+          "submitting": "Suppression...",
+          "error": "La suppression a échoué."
+        }
+      }
     }
   }
 }

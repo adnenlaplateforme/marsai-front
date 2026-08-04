@@ -580,6 +580,51 @@
           "submitting": "Working..."
         }
       }
+    },
+    "eventsManager": {
+      "overline": "Event management",
+      "title": "Planning & Workshops",
+      "subtitle": "Manage the festival agenda in Marseille and the flow of attendees.",
+      "loading": "Loading...",
+      "error": "Failed to load the events.",
+      "empty": "No event scheduled yet.",
+      "addEvent": "Add an event",
+      "stats": {
+        "bookings": "Total bookings",
+        "bookingsHint_one": "across {{count}} bookable workshop",
+        "bookingsHint_other": "across {{count}} bookable workshops",
+        "fillRate": "Fill rate",
+        "fillRateHint": "Across every workshop",
+        "noWorkshop": "No bookable workshop scheduled"
+      },
+      "days": {
+        "label": "Festival days"
+      },
+      "card": {
+        "registrations": "Registrations: {{taken}}",
+        "remaining": "{{remaining}} seats left",
+        "full": "Sold out",
+        "free": "Free entry, no booking",
+        "otherLang": "This event only exists in {{lang}}: the English translation is missing.",
+        "participants": "Attendee list",
+        "participantsUnavailable": "The attendee list is waiting for a server route: none tells yet who booked.",
+        "edit": "Edit",
+        "editUnavailable": "The edit form is not wired yet: only creation is.",
+        "delete": "Delete the event",
+        "deleteDialog": {
+          "title": "Delete {{title}}?",
+          "close": "Close",
+          "body": "The event will be removed from the schedule, in every translation.",
+          "bookings_one": "{{count}} booking will be erased along with it, without notifying the attendee.",
+          "bookings_other": "{{count}} bookings will be erased along with it, without notifying the attendees.",
+          "noBookings": "Nobody booked this event.",
+          "notice": "This action cannot be undone.",
+          "cancel": "Cancel",
+          "confirm": "Confirm deletion",
+          "submitting": "Deleting...",
+          "error": "Deletion failed."
+        }
+      }
     }
   }
 }
