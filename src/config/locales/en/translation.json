@@ -593,6 +593,8 @@
         "bookings": "Total bookings",
         "bookingsHint_one": "across {{count}} bookable workshop",
         "bookingsHint_other": "across {{count}} bookable workshops",
+        "today_one": "+{{count}} today",
+        "today_other": "+{{count}} today",
         "fillRate": "Fill rate",
         "fillRateHint": "Across every workshop",
         "noWorkshop": "No bookable workshop scheduled"

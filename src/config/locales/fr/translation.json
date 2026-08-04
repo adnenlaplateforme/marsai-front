@@ -590,6 +590,8 @@
         "bookings": "Réservations totales",
         "bookingsHint_one": "sur {{count}} atelier réservable",
         "bookingsHint_other": "sur {{count}} ateliers réservables",
+        "today_one": "+{{count}} aujourd'hui",
+        "today_other": "+{{count}} aujourd'hui",
         "fillRate": "Taux de remplissage",
         "fillRateHint": "Sur l'ensemble des ateliers",
         "noWorkshop": "Aucun atelier réservable au programme"
