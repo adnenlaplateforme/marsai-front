@@ -589,11 +589,7 @@
       "error": "Failed to load the events.",
       "empty": "No event scheduled yet.",
       "addEvent": "Add an event",
-      "editPage": {
-        "title": "Edit the event",
-        "loading": "Loading the event...",
-        "notFound": "Event not found.",
-        "error": "Saving failed.",
+      "form": {
         "required": "Required field",
         "titleFr": "Title (FR)",
         "titleEn": "Title (EN)",
@@ -601,12 +597,25 @@
         "descriptionEn": "Description (EN)",
         "location": "Location",
         "date": "Date and time",
+        "publishedAt": "Publication date",
         "duration": "Duration in minutes",
         "capacity": "Seats",
         "type": "Event type",
         "conference": "Conference",
-        "workshop": "Workshop",
+        "workshop": "Workshop"
+      },
+      "editPage": {
+        "title": "Edit the event",
+        "loading": "Loading the event...",
+        "notFound": "Event not found.",
+        "error": "Saving failed.",
         "submit": "Save"
+      },
+      "addPage": {
+        "title": "Create an event",
+        "error": "Creation failed.",
+        "partial": "The event was created, but its English version could not be saved. Fix it and submit again: the event will be completed, not duplicated.",
+        "submit": "Create the event"
       },
       "stats": {
         "bookings": "Total bookings",

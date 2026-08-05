@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import TitlePage from '../components/base/TitlePage';
-import FormSection from '../components/MovieSubmit/base/FormSection';
-import BasicFormInput from '../components/MovieSubmit/base/BasicFormInput';
-import FormTextArea from '../components/MovieSubmit/base/FormTextArea';
+import EventForm from '../components/admin/EventForm';
 import { useApi } from '../hooks/useApi';
 
 /**
@@ -29,10 +26,7 @@ function EventsEditManagerPage() {
   const navigate = useNavigate();
   const api = useApi();
   const form = useForm({ criteriaMode: 'all' });
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = form;
+  const { handleSubmit } = form;
 
   const [loaded, setLoaded] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +102,11 @@ function EventsEditManagerPage() {
       return true;
     };
 
+    // Le champ des places disparaît pour une conférence : il n'y a alors rien à
+    // lire, et la base impose pourtant `CHECK (capacity > 0)`. 1 satisfait la
+    // contrainte sans rien promettre.
+    const isBookable = data.isBookable === 'true';
+
     try {
       const frOk = await write({
         lang: 'FR',
@@ -116,8 +115,8 @@ function EventsEditManagerPage() {
         location: data.location,
         date: data.date,
         duration: Number(data.duration),
-        capacity: Number(data.capacity),
-        isBookable: data.isBookable === 'true',
+        capacity: isBookable ? Number(data.capacity) : 1,
+        isBookable,
       });
       if (!frOk) return;
 
@@ -168,148 +167,24 @@ function EventsEditManagerPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <FormSection className="text-zinc-200">
-          <div className="flex flex-col w-full md:flex-row md:justify-between md:gap-20">
-            <BasicFormInput
-              label={t(target + 'titleFr')}
-              id="form-title-fr"
-              name="titleFr"
-              title={t(target + 'titleFr')}
-              form={form}
-              defaultValue={fr?.title ?? ''}
-              validation={{ required: t(target + 'required') }}
-            />
-            <BasicFormInput
-              label={t(target + 'titleEn')}
-              id="form-title-en"
-              name="titleEn"
-              title={t(target + 'titleEn')}
-              form={form}
-              defaultValue={en?.title ?? ''}
-              validation={{ required: t(target + 'required') }}
-            />
-          </div>
-
-          <div className="flex flex-col items-center w-full md:flex-row md:justify-between md:gap-20">
-            <FormTextArea
-              label={t(target + 'descriptionFr')}
-              maxCount={1000}
-              id="form-description-fr"
-              name="descriptionFr"
-              title={t(target + 'descriptionFr')}
-              form={form}
-              defaultValue={fr?.description ?? ''}
-            />
-            <FormTextArea
-              label={t(target + 'descriptionEn')}
-              maxCount={1000}
-              id="form-description-en"
-              name="descriptionEn"
-              title={t(target + 'descriptionEn')}
-              form={form}
-              defaultValue={en?.description ?? ''}
-            />
-          </div>
-
-          <div className="flex flex-col w-full md:flex-row md:justify-between md:gap-20">
-            <BasicFormInput
-              label={t(target + 'location')}
-              id="form-location"
-              name="location"
-              title={t(target + 'location')}
-              form={form}
-              defaultValue={shared.location ?? ''}
-              validation={{ required: t(target + 'required') }}
-            />
-            <BasicFormInput
-              label={t(target + 'date')}
-              type="datetime-local"
-              id="form-date"
-              name="date"
-              title={t(target + 'date')}
-              form={form}
-              // `datetime-local` n'accepte que « YYYY-MM-DDTHH:mm » ; l'API rend
-              // une date complète, secondes comprises.
-              defaultValue={(shared.date ?? '').slice(0, 16)}
-              validation={{ required: t(target + 'required') }}
-            />
-          </div>
-
-          <div className="flex flex-col w-full md:flex-row md:justify-between md:gap-20">
-            <BasicFormInput
-              label={t(target + 'duration')}
-              id="form-duration"
-              name="duration"
-              title={t(target + 'duration')}
-              form={form}
-              defaultValue={String(shared.duration ?? '')}
-              validation={{ required: t(target + 'required') }}
-            />
-            <BasicFormInput
-              label={t(target + 'capacity')}
-              id="form-capacity"
-              name="capacity"
-              title={t(target + 'capacity')}
-              form={form}
-              defaultValue={String(shared.capacity ?? '')}
-              validation={{ required: t(target + 'required') }}
-            />
-          </div>
-
-          <fieldset className="flex flex-col w-full gap-3 pb-4">
-            <legend className="pb-2">{t(target + 'type')}</legend>
-            <div className="flex flex-row justify-around gap-3 w-full">
-              <label
-                className="flex items-center justify-center h-16 border border-gray rounded-sm cursor-pointer has-checked:bg-secondary has-checked:border-accent w-1/2 p-1"
-                htmlFor="form-conference"
-              >
-                {t(target + 'conference')}
-                <input
-                  className="appearance-none"
-                  type="radio"
-                  id="form-conference"
-                  value="false"
-                  defaultChecked={!shared.is_bookable}
-                  {...form.register('isBookable')}
-                />
-              </label>
-              <label
-                className="flex items-center justify-center h-16 border border-gray rounded-sm cursor-pointer has-checked:bg-secondary has-checked:border-accent w-1/2 p-1"
-                htmlFor="form-workshop"
-              >
-                {t(target + 'workshop')}
-                <input
-                  className="appearance-none"
-                  type="radio"
-                  id="form-workshop"
-                  value="true"
-                  defaultChecked={!!shared.is_bookable}
-                  {...form.register('isBookable')}
-                />
-              </label>
-            </div>
-          </fieldset>
-        </FormSection>
-
-        {error && (
-          <p
-            role="alert"
-            className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg p-3"
-          >
-            {error}
-          </p>
-        )}
-
-        <button
-          className="flex justify-center items-center border p-3 w-1/3 rounded-md bg-accent border-red-500 uppercase cursor-pointer font-bold hover:bg-red-600 transition-all disabled:bg-primary disabled:cursor-not-allowed"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <AiOutlineLoading3Quarters className="animate-spin size-6" />
-          ) : (
-            t(target + 'submit')
-          )}
-        </button>
+        <EventForm
+          form={form}
+          submitLabel={t(target + 'submit')}
+          error={error}
+          defaults={{
+            titleFr: fr?.title ?? '',
+            titleEn: en?.title ?? '',
+            descriptionFr: fr?.description ?? '',
+            descriptionEn: en?.description ?? '',
+            location: shared.location ?? '',
+            // `datetime-local` n'accepte que « YYYY-MM-DDTHH:mm » ; l'API rend
+            // une date complète, secondes comprises.
+            date: (shared.date ?? '').slice(0, 16),
+            duration: String(shared.duration ?? ''),
+            capacity: String(shared.capacity ?? ''),
+            isBookable: !!shared.is_bookable,
+          }}
+        />
       </form>
     </div>
   );

@@ -586,11 +586,7 @@
       "error": "Erreur lors de la récupération des événements.",
       "empty": "Aucun événement au programme pour l'instant.",
       "addEvent": "Ajouter un événement",
-      "editPage": {
-        "title": "Modifier l'événement",
-        "loading": "Chargement de l'événement...",
-        "notFound": "Événement introuvable.",
-        "error": "L'enregistrement a échoué.",
+      "form": {
         "required": "Champ obligatoire",
         "titleFr": "Titre (FR)",
         "titleEn": "Titre (EN)",
@@ -598,12 +594,25 @@
         "descriptionEn": "Description (EN)",
         "location": "Lieu",
         "date": "Date et heure",
+        "publishedAt": "Date de publication",
         "duration": "Durée en minutes",
         "capacity": "Nombre de places",
         "type": "Type d'événement",
         "conference": "Conférence",
-        "workshop": "Atelier",
+        "workshop": "Atelier"
+      },
+      "editPage": {
+        "title": "Modifier l'événement",
+        "loading": "Chargement de l'événement...",
+        "notFound": "Événement introuvable.",
+        "error": "L'enregistrement a échoué.",
         "submit": "Enregistrer"
+      },
+      "addPage": {
+        "title": "Créer un événement",
+        "error": "La création a échoué.",
+        "partial": "L'événement a bien été créé, mais sa version anglaise n'a pas pu être enregistrée. Corrigez-la et validez à nouveau : l'événement sera complété, pas dupliqué.",
+        "submit": "Créer l'événement"
       },
       "stats": {
         "bookings": "Réservations totales",
