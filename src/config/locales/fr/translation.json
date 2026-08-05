@@ -586,6 +586,25 @@
       "error": "Erreur lors de la récupération des événements.",
       "empty": "Aucun événement au programme pour l'instant.",
       "addEvent": "Ajouter un événement",
+      "editPage": {
+        "title": "Modifier l'événement",
+        "loading": "Chargement de l'événement...",
+        "notFound": "Événement introuvable.",
+        "error": "L'enregistrement a échoué.",
+        "required": "Champ obligatoire",
+        "titleFr": "Titre (FR)",
+        "titleEn": "Titre (EN)",
+        "descriptionFr": "Description (FR)",
+        "descriptionEn": "Description (EN)",
+        "location": "Lieu",
+        "date": "Date et heure",
+        "duration": "Durée en minutes",
+        "capacity": "Nombre de places",
+        "type": "Type d'événement",
+        "conference": "Conférence",
+        "workshop": "Atelier",
+        "submit": "Enregistrer"
+      },
       "stats": {
         "bookings": "Réservations totales",
         "bookingsHint_one": "sur {{count}} atelier réservable",
@@ -621,7 +640,6 @@
           "error": "La liste des participants n'a pas pu être chargée."
         },
         "edit": "Modifier",
-        "editUnavailable": "Le formulaire d'édition n'est pas encore branché : seule la création l'est.",
         "delete": "Supprimer l'événement",
         "deleteDialog": {
           "title": "Supprimer {{title}} ?",

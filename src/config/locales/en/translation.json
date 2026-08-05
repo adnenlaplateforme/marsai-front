@@ -589,6 +589,25 @@
       "error": "Failed to load the events.",
       "empty": "No event scheduled yet.",
       "addEvent": "Add an event",
+      "editPage": {
+        "title": "Edit the event",
+        "loading": "Loading the event...",
+        "notFound": "Event not found.",
+        "error": "Saving failed.",
+        "required": "Required field",
+        "titleFr": "Title (FR)",
+        "titleEn": "Title (EN)",
+        "descriptionFr": "Description (FR)",
+        "descriptionEn": "Description (EN)",
+        "location": "Location",
+        "date": "Date and time",
+        "duration": "Duration in minutes",
+        "capacity": "Seats",
+        "type": "Event type",
+        "conference": "Conference",
+        "workshop": "Workshop",
+        "submit": "Save"
+      },
       "stats": {
         "bookings": "Total bookings",
         "bookingsHint_one": "across {{count}} bookable workshop",
@@ -624,7 +643,6 @@
           "error": "The attendee list could not be loaded."
         },
         "edit": "Edit",
-        "editUnavailable": "The edit form is not wired yet: only creation is.",
         "delete": "Delete the event",
         "deleteDialog": {
           "title": "Delete {{title}}?",

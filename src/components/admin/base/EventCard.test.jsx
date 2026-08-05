@@ -1,8 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
 import '../../../config/i18n';
 import EventCard from './EventCard';
+
+// La carte mène désormais au formulaire d'édition : son lien a besoin d'un
+// routeur, faute de quoi chaque rendu lèverait.
+const renderCard = ui => render(<MemoryRouter>{ui}</MemoryRouter>);
 
 // Comme pour JuryCard : `useApi` traîne un routeur et un contexte
 // d'authentification, la carte n'a besoin que du verbe « appelle telle route ».
@@ -28,7 +33,7 @@ beforeEach(() => {
 });
 
 it('affiche le créneau, le titre et le lieu', () => {
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   expect(screen.getByText('10:00 – 12:00')).toBeInTheDocument();
   expect(
@@ -38,7 +43,7 @@ it('affiche le créneau, le titre et le lieu', () => {
 });
 
 it('annonce les inscriptions et les places restantes', () => {
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   expect(screen.getByText(/Nombre d'inscriptions : 12/)).toBeInTheDocument();
   expect(screen.getByText(/8 places restantes/)).toBeInTheDocument();
@@ -49,7 +54,7 @@ it('annonce les inscriptions et les places restantes', () => {
  * « 0 inscription » ferait passer une salle libre pour un atelier boudé.
  */
 it('dit qu’une conférence ne se réserve pas au lieu de compter zéro', () => {
-  render(
+  renderCard(
     <EventCard
       event={{
         ...workshop,
@@ -70,36 +75,35 @@ it('dit qu’une conférence ne se réserve pas au lieu de compter zéro', () =>
  * manque, plutôt que de croire à un titre mal saisi.
  */
 it('signale la traduction manquante dans la langue de l’interface', () => {
-  render(<EventCard event={{ ...workshop, lang: 'EN' }} />);
+  renderCard(<EventCard event={{ ...workshop, lang: 'EN' }} />);
 
   expect(screen.getByText('EN')).toBeInTheDocument();
 });
 
 it('ne signale rien quand la traduction est celle de l’interface', () => {
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   expect(screen.queryByText('EN')).not.toBeInTheDocument();
 });
 
 /**
- * La dernière action de la maquette que rien ne sert encore : le formulaire
- * d'édition n'existe pas. Elle reste à sa place, désactivée et motivée — comme
- * le « mode manuel » du panneau de distribution — plutôt que de promettre un
- * clic sans effet.
+ * L'action attendait son formulaire ; il existe. Le lien porte l'identifiant de
+ * l'événement et non son rang dans le planning : deux cartes voisines mèneraient
+ * sinon au même écran.
  */
-it('désactive la modification en donnant la raison', () => {
-  render(<EventCard event={workshop} />);
+it('mène au formulaire d’édition de cet événement', () => {
+  renderCard(<EventCard event={workshop} />);
 
-  const edit = screen.getByRole('button', { name: /Modifier/ });
-
-  expect(edit).toBeDisabled();
-  expect(edit).toHaveAccessibleDescription(/formulaire/i);
+  expect(screen.getByRole('link', { name: /Modifier/ })).toHaveAttribute(
+    'href',
+    '/admin/events/3/edit'
+  );
 });
 
 it('ouvre la liste des participants sans rien charger avant le clic', async () => {
   const user = userEvent.setup();
   api.mockResolvedValue({ ok: true, status: 200, json: async () => [] });
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   const participants = screen.getByRole('button', {
     name: /Liste participants/,
@@ -120,7 +124,7 @@ it('ouvre la liste des participants sans rien charger avant le clic', async () =
 
 it('ne supprime rien tant que la confirmation n’est pas donnée', async () => {
   const user = userEvent.setup();
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   await user.click(screen.getByRole('button', { name: /Supprimer/ }));
 
@@ -135,7 +139,7 @@ it('ne supprime rien tant que la confirmation n’est pas donnée', async () => 
  */
 it('prévient que les réservations partent avec l’événement', async () => {
   const user = userEvent.setup();
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   await user.click(screen.getByRole('button', { name: /Supprimer/ }));
 
@@ -148,7 +152,7 @@ it('supprime l’événement et prévient le parent', async () => {
   const user = userEvent.setup();
   const onDeleted = vi.fn();
   api.mockResolvedValue({ ok: true, status: 204 });
-  render(<EventCard event={workshop} onDeleted={onDeleted} />);
+  renderCard(<EventCard event={workshop} onDeleted={onDeleted} />);
 
   await user.click(screen.getByRole('button', { name: /Supprimer/ }));
   await user.click(screen.getByRole('button', { name: /Confirmer/ }));
@@ -165,7 +169,7 @@ it('affiche le refus du serveur sans prévenir le parent', async () => {
     status: 404,
     json: async () => ({ message: 'Event not found' }),
   });
-  render(<EventCard event={workshop} onDeleted={onDeleted} />);
+  renderCard(<EventCard event={workshop} onDeleted={onDeleted} />);
 
   await user.click(screen.getByRole('button', { name: /Supprimer/ }));
   await user.click(screen.getByRole('button', { name: /Confirmer/ }));
@@ -176,7 +180,7 @@ it('affiche le refus du serveur sans prévenir le parent', async () => {
 
 it('renonce sans rien appeler', async () => {
   const user = userEvent.setup();
-  render(<EventCard event={workshop} />);
+  renderCard(<EventCard event={workshop} />);
 
   await user.click(screen.getByRole('button', { name: /Supprimer/ }));
   await user.click(screen.getByRole('button', { name: /Annuler/ }));
