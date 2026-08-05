@@ -89,7 +89,7 @@ function Workshops({ data, error, loading }) {
           {data.map(event => (
             <CardWorkshop
               key={event.id}
-              path={event.slug}
+              path={event.id + '-' + event.slug}
               time={formatTime(event.date)}
               date={formatDate(event.date)}
               title={event.title}

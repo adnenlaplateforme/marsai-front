@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form';
 import { useTranslation, Trans } from 'react-i18next';
 
 function EventBookingPage() {
-  const { slug } = useParams();
+  const { idSlug } = useParams();
+  const id = idSlug?.split('-')[0];
   const fetchApi = useApi();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +49,7 @@ function EventBookingPage() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetchApi(`/events/${slug}?lang=${currentLang}`);
+        const response = await fetchApi(`/events/${id}?lang=${currentLang}`);
         if (response && response.ok) {
           const data = await response.json();
           setEvent(data);
@@ -62,7 +63,7 @@ function EventBookingPage() {
       }
     };
     fetchEvent();
-  }, [slug, currentLang]);
+  }, [id, currentLang]);
 
   return (
     <>
