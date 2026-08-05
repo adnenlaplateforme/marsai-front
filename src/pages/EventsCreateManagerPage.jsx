@@ -43,29 +43,37 @@ function EventsCreateManagerPage() {
 
 
     async function onSubmit(data) {
-        console.log(data);
-
         try {
             const res = await api("/events",
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
+                    // Un formulaire HTML ne rend que des chaînes, là où
+                    // CreateEventRequestSchema attend deux entiers et un
+                    // booléen : envoyé tel quel, "60" et "true" repartent en 400.
+                    body: JSON.stringify({
+                        ...data,
+                        duration: Number(data.duration),
+                        capacity: Number(data.capacity),
+                        isBookable: data.isBookable === 'true',
+                    }),
                 }
             );
+
+            // `useApi` rend null quand la session est morte : il a déjà déconnecté.
+            if (!res) return;
+
             if (res.ok) {
-                console.log(res);
                 toast.success("Event ajoute");
                 navigate('/admin/events');
             }
             else {
-                console.log(res);
                 toast.error("Un probleme est survenu");
             }
 
         } catch (e) {
             console.error('error: ', e);
-            toast.error(e);
+            toast.error("Un probleme est survenu");
         }
 
 
