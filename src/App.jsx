@@ -12,6 +12,7 @@ import JuryManager from './components/admin/JuryManager';
 import LeaderboardManager from './components/admin/LeaderboardManager';
 import EventsManager from './components/admin/EventsManager';
 import EventsCreateManagerPage from './pages/EventsCreateManagerPage';
+import EventsEditManagerPage from './pages/EventsEditManagerPage';
 import PublicLayout from './components/PublicLayout';
 import Newsletter from './components/admin/Newsletter';
 import EventsPage from './pages/EventsPage';
@@ -58,6 +59,7 @@ function App() {
             <Route path="leaderboard" element={<LeaderboardManager />} />
             <Route path="events" element={<EventsManager />} />
             <Route path="events/add" element={<EventsCreateManagerPage />} />
+            <Route path="events/:id/edit" element={<EventsEditManagerPage />} />
             <Route path="newsletter" element={<Newsletter />} />
           </Route>
         </Route>
