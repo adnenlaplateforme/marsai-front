@@ -8,6 +8,7 @@ import {
   FiTrash2,
 } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 import { useApi } from '../../../hooks/useApi';
 import ParticipantsDialog from './ParticipantsDialog';
 import { seatsTaken, timeRange } from './eventSchedule';
@@ -15,10 +16,9 @@ import { seatsTaken, timeRange } from './eventSchedule';
 /**
  * Une carte du planning : un créneau, ce qui s'y joue, et où.
  *
- * La maquette pose deux actions au bas de la carte. La liste des participants
- * est branchée sur `GET /events/:id/bookings` ; la modification attend encore
- * son formulaire et reste affichée, désactivée, avec la raison en clair — un
- * admin doit pouvoir distinguer « pas encore livré » de « en panne ».
+ * La maquette pose deux actions au bas de la carte : la liste des participants,
+ * branchée sur `GET /events/:id/bookings`, et la modification, qui mène au
+ * formulaire d'édition des deux langues.
  */
 function EventCard({ event, onDeleted = () => {} }) {
   const { t, i18n } = useTranslation();
@@ -91,13 +91,13 @@ function EventCard({ event, onDeleted = () => {} }) {
           <FiDownload className="size-4" aria-hidden="true" />
           {t(target + 'participants')}
         </button>
-        <UnavailableAction
-          id={`event-edit-${event.id}`}
-          icon={<FiEdit2 className="size-4" />}
-          label={t(target + 'edit')}
-          reason={t(target + 'editUnavailable')}
-          className="bg-primary border border-white/10 text-neutral-300"
-        />
+        <Link
+          to={`/admin/events/${event.id}/edit`}
+          className="inline-flex items-center gap-2 text-sm uppercase tracking-wider font-bold rounded-lg px-4 py-2 bg-primary border border-white/10 text-neutral-300 hover:bg-white/5 transition-colors"
+        >
+          <FiEdit2 className="size-4" aria-hidden="true" />
+          {t(target + 'edit')}
+        </Link>
 
         <button
           type="button"
@@ -125,32 +125,6 @@ function EventCard({ event, onDeleted = () => {} }) {
         />
       )}
     </article>
-  );
-}
-
-/**
- * Une action de la maquette qui n'a pas encore de quoi tourner.
- *
- * Le bouton est désactivé — donc hors du parcours au clavier — et sa raison est
- * rattachée par `aria-describedby` plutôt que par un simple `title` : un lecteur
- * d'écran annoncerait sinon un bouton inerte sans dire pourquoi.
- */
-function UnavailableAction({ id, icon, label, reason, className }) {
-  return (
-    <>
-      <button
-        type="button"
-        disabled
-        aria-describedby={id}
-        className={`inline-flex items-center gap-2 text-sm uppercase tracking-wider font-bold rounded-lg px-4 py-2 opacity-40 cursor-not-allowed ${className}`}
-      >
-        {icon}
-        {label}
-      </button>
-      <span id={id} className="sr-only">
-        {reason}
-      </span>
-    </>
   );
 }
 

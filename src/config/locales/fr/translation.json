@@ -640,7 +640,6 @@
           "error": "La liste des participants n'a pas pu être chargée."
         },
         "edit": "Modifier",
-        "editUnavailable": "Le formulaire d'édition n'est pas encore branché : seule la création l'est.",
         "delete": "Supprimer l'événement",
         "deleteDialog": {
           "title": "Supprimer {{title}} ?",

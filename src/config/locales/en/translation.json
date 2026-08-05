@@ -643,7 +643,6 @@
           "error": "The attendee list could not be loaded."
         },
         "edit": "Edit",
-        "editUnavailable": "The edit form is not wired yet: only creation is.",
         "delete": "Delete the event",
         "deleteDialog": {
           "title": "Delete {{title}}?",
