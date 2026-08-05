@@ -41,7 +41,7 @@ function App() {
           <Route path="/events" element={<EventsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/invite/:token" element={<JuryRegisterPage />} />
-          <Route path="/events/:slug" element={<EventBookingPage />} />
+          <Route path="/events/:idSlug" element={<EventBookingPage />} />
           <Route
             path="/bookings/unsubscribe/:token"
             element={<UnsubscribePage />}
