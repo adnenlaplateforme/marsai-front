@@ -30,12 +30,25 @@ function event(overrides = {}) {
   };
 }
 
-/** `GET /events?lang=FR` puis `?lang=EN` : la page lit les deux catalogues. */
-function serve({ FR = [], EN = [] }) {
-  api.mockImplementation(path => ({
-    ok: true,
-    json: async () => (path.includes('lang=EN') ? EN : FR),
-  }));
+/**
+ * `GET /events?lang=FR`, puis `?lang=EN`, puis `GET /bookings/stats` : la page
+ * lit les deux catalogues et le compteur du jour.
+ *
+ * `stats: null` fait échouer le seul appel des statistiques, les événements
+ * continuant de répondre — c'est le cas qui distingue les deux chiffres.
+ */
+function serve({ FR = [], EN = [], stats = { total: 0, today: 0 } }) {
+  api.mockImplementation(path => {
+    if (path.includes('/bookings/stats')) {
+      return stats
+        ? { ok: true, json: async () => stats }
+        : { ok: false, status: 500, json: async () => ({}) };
+    }
+    return {
+      ok: true,
+      json: async () => (path.includes('lang=EN') ? EN : FR),
+    };
+  });
 }
 
 function renderPage() {
@@ -137,4 +150,45 @@ it('signale une lecture en échec plutôt qu’un planning vide', async () => {
   expect(await screen.findByRole('alert')).toHaveTextContent(
     /Erreur lors de la récupération des événements/
   );
+});
+
+/**
+ * Le « +12 aujourd'hui » de la maquette. Il ne se calcule pas depuis le
+ * planning : `remaining_seats` dit combien de places sont parties, jamais quand.
+ * Seul `GET /bookings/stats` date les réservations.
+ */
+it('annonce les réservations posées aujourd’hui', async () => {
+  serve({
+    FR: [event({ id: 1, capacity: 20, remaining_seats: 8 })],
+    stats: { total: 27, today: 12 },
+  });
+  renderPage();
+
+  expect(await screen.findByText(/\+12 aujourd'hui/)).toBeInTheDocument();
+});
+
+it('accorde le libellé au singulier', async () => {
+  serve({ FR: [event()], stats: { total: 1, today: 1 } });
+  renderPage();
+
+  expect(await screen.findByText(/\+1 aujourd'hui/)).toBeInTheDocument();
+});
+
+/**
+ * Les statistiques sont lues à part du planning : elles ne servent qu'une
+ * mention sous un chiffre déjà là. Les fondre dans le même `Promise.all`
+ * viderait tout le programme pour un compteur manquant.
+ */
+it('garde le planning quand seules les statistiques échouent', async () => {
+  serve({
+    FR: [event({ id: 1, title: 'Masterclass', capacity: 20, remaining_seats: 8 })],
+    stats: null,
+  });
+  renderPage();
+
+  expect(await screen.findByText('Masterclass')).toBeInTheDocument();
+  expect(screen.getByText('12')).toBeInTheDocument();
+  expect(screen.queryByText(/aujourd'hui/)).not.toBeInTheDocument();
+  // À défaut du compteur du jour, la mention d'origine reprend sa place.
+  expect(screen.getByText(/sur 1 atelier réservable/)).toBeInTheDocument();
 });

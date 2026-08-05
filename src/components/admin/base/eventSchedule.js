@@ -70,9 +70,10 @@ export function seatsTaken(event) {
 /**
  * Les deux chiffres de l'en-tête : réservations totales et taux de remplissage.
  *
- * Faute d'une route qui date les réservations, le compte est celui du moment —
- * la maquette annonçait un « +12 aujourd'hui » que rien ne permet de calculer,
- * et un chiffre inventé sur un tableau de bord vaut moins que pas de chiffre.
+ * Le compte est celui du moment, déduit des places restantes. Le « +12
+ * aujourd'hui » de la maquette ne s'en déduit pas — `remaining_seats` dit
+ * combien de places sont parties, jamais quand — et vient de
+ * `GET /bookings/stats`, que la page lit séparément.
  */
 export function scheduleStats(events) {
   let bookings = 0;
