@@ -597,6 +597,7 @@
         "descriptionEn": "Description (EN)",
         "location": "Location",
         "date": "Date and time",
+        "publishedAt": "Publication date",
         "duration": "Duration in minutes",
         "capacity": "Seats",
         "type": "Event type",
@@ -609,6 +610,12 @@
         "notFound": "Event not found.",
         "error": "Saving failed.",
         "submit": "Save"
+      },
+      "addPage": {
+        "title": "Create an event",
+        "error": "Creation failed.",
+        "partial": "The event was created, but its English version could not be saved. Fix it and submit again: the event will be completed, not duplicated.",
+        "submit": "Create the event"
       },
       "stats": {
         "bookings": "Total bookings",

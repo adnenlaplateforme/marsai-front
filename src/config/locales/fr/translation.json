@@ -594,6 +594,7 @@
         "descriptionEn": "Description (EN)",
         "location": "Lieu",
         "date": "Date et heure",
+        "publishedAt": "Date de publication",
         "duration": "Durée en minutes",
         "capacity": "Nombre de places",
         "type": "Type d'événement",
@@ -606,6 +607,12 @@
         "notFound": "Événement introuvable.",
         "error": "L'enregistrement a échoué.",
         "submit": "Enregistrer"
+      },
+      "addPage": {
+        "title": "Créer un événement",
+        "error": "La création a échoué.",
+        "partial": "L'événement a bien été créé, mais sa version anglaise n'a pas pu être enregistrée. Corrigez-la et validez à nouveau : l'événement sera complété, pas dupliqué.",
+        "submit": "Créer l'événement"
       },
       "stats": {
         "bookings": "Réservations totales",

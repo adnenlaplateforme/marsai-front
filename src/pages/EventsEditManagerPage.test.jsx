@@ -138,6 +138,31 @@ it('enregistre en un PUT par langue', async () => {
 });
 
 /**
+ * Le champ des places disparaît pour une conférence : il n'y a alors plus rien
+ * à lire dans le formulaire, alors que la base impose `CHECK (capacity > 0)`.
+ * Sans repli, un `NaN` partait à l'API et la modification échouait en 400 —
+ * exactement le genre de panne que le masquage d'un champ provoque en silence.
+ */
+it('replie sur une place quand on bascule en conférence', async () => {
+  serve();
+  renderPage();
+  await screen.findByDisplayValue('Masterclass prompt');
+
+  await userEvent.click(screen.getByLabelText('Conférence'));
+  expect(screen.queryByLabelText('Nombre de places')).not.toBeInTheDocument();
+
+  api.mockImplementation(() => ({ ok: true, json: async () => ({}) }));
+  await userEvent.click(screen.getByRole('button', { name: /Enregistrer/i }));
+
+  await waitFor(() => expect(navigate).toHaveBeenCalled());
+
+  const [fr] = api.mock.calls
+    .filter(call => call[1]?.method === 'PUT')
+    .map(call => JSON.parse(call[1].body));
+  expect(fr).toMatchObject({ isBookable: false, capacity: 1 });
+});
+
+/**
  * Le slug est l'adresse publique de l'événement et vit dans `event`, partagé
  * par les deux langues. Le back ne le recalcule plus à la modification ; le
  * formulaire n'a donc aucune raison d'en envoyer un.

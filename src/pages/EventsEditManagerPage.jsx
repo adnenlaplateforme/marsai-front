@@ -102,6 +102,11 @@ function EventsEditManagerPage() {
       return true;
     };
 
+    // Le champ des places disparaît pour une conférence : il n'y a alors rien à
+    // lire, et la base impose pourtant `CHECK (capacity > 0)`. 1 satisfait la
+    // contrainte sans rien promettre.
+    const isBookable = data.isBookable === 'true';
+
     try {
       const frOk = await write({
         lang: 'FR',
@@ -110,8 +115,8 @@ function EventsEditManagerPage() {
         location: data.location,
         date: data.date,
         duration: Number(data.duration),
-        capacity: Number(data.capacity),
-        isBookable: data.isBookable === 'true',
+        capacity: isBookable ? Number(data.capacity) : 1,
+        isBookable,
       });
       if (!frOk) return;
 

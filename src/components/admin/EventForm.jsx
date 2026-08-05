@@ -29,6 +29,14 @@ function EventForm({
     formState: { isSubmitting },
   } = form;
 
+  // Le nombre de places d'un événement qu'on ne réserve pas ne veut rien dire.
+  // Le champ disparaît donc pour une conférence, et c'est la page qui envoie la
+  // valeur que la base exige malgré tout — voir `CHECK (capacity > 0)`.
+  // `watch` reçoit un repli : les boutons radio ne renseignent l'état de
+  // react-hook-form qu'au premier changement, et l'un des deux est déjà coché.
+  const isBookable =
+    form.watch('isBookable', defaults.isBookable ? 'true' : 'false') !== 'false';
+
   return (
     <>
       <FormSection className="text-zinc-200">
@@ -106,15 +114,17 @@ function EventForm({
             defaultValue={defaults.duration ?? ''}
             validation={{ required: t(target + 'required') }}
           />
-          <BasicFormInput
-            label={t(target + 'capacity')}
-            id="form-capacity"
-            name="capacity"
-            title={t(target + 'capacity')}
-            form={form}
-            defaultValue={defaults.capacity ?? ''}
-            validation={{ required: t(target + 'required') }}
-          />
+          {isBookable && (
+            <BasicFormInput
+              label={t(target + 'capacity')}
+              id="form-capacity"
+              name="capacity"
+              title={t(target + 'capacity')}
+              form={form}
+              defaultValue={defaults.capacity ?? ''}
+              validation={{ required: t(target + 'required') }}
+            />
+          )}
         </div>
 
         {withPublishedAt && (
