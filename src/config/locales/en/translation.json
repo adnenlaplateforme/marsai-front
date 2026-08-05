@@ -589,11 +589,7 @@
       "error": "Failed to load the events.",
       "empty": "No event scheduled yet.",
       "addEvent": "Add an event",
-      "editPage": {
-        "title": "Edit the event",
-        "loading": "Loading the event...",
-        "notFound": "Event not found.",
-        "error": "Saving failed.",
+      "form": {
         "required": "Required field",
         "titleFr": "Title (FR)",
         "titleEn": "Title (EN)",
@@ -605,7 +601,13 @@
         "capacity": "Seats",
         "type": "Event type",
         "conference": "Conference",
-        "workshop": "Workshop",
+        "workshop": "Workshop"
+      },
+      "editPage": {
+        "title": "Edit the event",
+        "loading": "Loading the event...",
+        "notFound": "Event not found.",
+        "error": "Saving failed.",
         "submit": "Save"
       },
       "stats": {

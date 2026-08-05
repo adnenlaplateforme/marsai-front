@@ -586,11 +586,7 @@
       "error": "Erreur lors de la récupération des événements.",
       "empty": "Aucun événement au programme pour l'instant.",
       "addEvent": "Ajouter un événement",
-      "editPage": {
-        "title": "Modifier l'événement",
-        "loading": "Chargement de l'événement...",
-        "notFound": "Événement introuvable.",
-        "error": "L'enregistrement a échoué.",
+      "form": {
         "required": "Champ obligatoire",
         "titleFr": "Titre (FR)",
         "titleEn": "Titre (EN)",
@@ -602,7 +598,13 @@
         "capacity": "Nombre de places",
         "type": "Type d'événement",
         "conference": "Conférence",
-        "workshop": "Atelier",
+        "workshop": "Atelier"
+      },
+      "editPage": {
+        "title": "Modifier l'événement",
+        "loading": "Chargement de l'événement...",
+        "notFound": "Événement introuvable.",
+        "error": "L'enregistrement a échoué.",
         "submit": "Enregistrer"
       },
       "stats": {
