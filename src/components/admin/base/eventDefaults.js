@@ -8,8 +8,10 @@
  * main pour décaler une annonce.
  *
  * Tout est lu et rendu en heure locale. `toISOString()` donnerait la date UTC,
- * qui change de jour en fin de soirée pour un admin à l'est de Greenwich — un
- * événement saisi le 5 au soir serait proposé à la publication le 6.
+ * qui n'est pas le même jour aux deux extrémités de la journée : à l'est de
+ * Greenwich elle rend la veille au petit matin — un admin parisien saisissant à
+ * 00 h 30 se verrait proposer une publication déjà passée — et à l'ouest, le
+ * lendemain en soirée.
  */
 export function defaultPublishedAt(now) {
   const pad = value => String(value).padStart(2, '0');

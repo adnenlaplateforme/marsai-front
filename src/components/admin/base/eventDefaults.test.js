@@ -21,8 +21,20 @@ it('complète les mois et les jours à deux chiffres', () => {
 });
 
 /**
- * 23 h 30 le 31 décembre : `toISOString()` aurait rendu le 1er janvier suivant
- * pour tout fuseau à l'est de Greenwich. C'est le cas qui condamne l'UTC.
+ * 00 h 30 le 1er janvier : à l'est de Greenwich, `toISOString()` rend la veille,
+ * et l'admin se verrait proposer une publication déjà passée.
+ */
+it('reste sur le jour local au petit matin', () => {
+  expect(defaultPublishedAt(new Date(2026, 0, 1, 0, 30))).toBe('2026-01-01T09:00');
+});
+
+/**
+ * 23 h 30 le 31 décembre : le symétrique, pour un fuseau négatif, où
+ * `toISOString()` rend le lendemain.
+ *
+ * Les deux cas sont nécessaires : chacun pris seul reste vert dans la moitié
+ * des fuseaux. C'est ce qui était arrivé ici — vérifié par mutation, le test du
+ * soir seul passait en CEST alors que le helper repassait en UTC.
  */
 it('reste sur le jour local en fin de soirée', () => {
   expect(defaultPublishedAt(new Date(2026, 11, 31, 23, 30))).toBe(
