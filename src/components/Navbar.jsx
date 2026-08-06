@@ -70,7 +70,7 @@ function Navbar() {
           <Logo
             src={marsaiLogo}
             alt="logo marsai"
-            imgClassName="w-[90px] lg:w-[110px]"
+            imgClassName="h-7 w-auto lg:h-8"
           />
 
           <nav
