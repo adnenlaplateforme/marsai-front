@@ -30,7 +30,7 @@
     "legalNotice": "Legal Notice",
     "press": "Press",
     "contact": "Contact",
-    "copyright": "© 2025 MARS.A.I",
+    "copyright": "© {{year}} MARS.A.I",
     "emailOk": "Successfully registered to newsletter.",
     "emailError": "Already registered to newsletter"
   },

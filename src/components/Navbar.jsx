@@ -67,11 +67,7 @@ function Navbar() {
               : 'border-transparent bg-transparent'
           }`}
         >
-          <Logo
-            src={marsaiLogo}
-            alt="logo marsai"
-            imgClassName="h-7 w-auto lg:h-8"
-          />
+          <Logo src={marsaiLogo} alt="logo marsai" />
 
           <nav
             id="navbarCollapse"

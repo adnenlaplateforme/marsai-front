@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 
-function Logo({ src, alt, imgClassName = 'w-[60px]' }) {
+// Dimensionné en hauteur : le ratio du logo (2,9:1) rend une largeur fixe
+// imprévisible. L'alignement appartient au parent, pas au logo.
+function Logo({
+  src,
+  alt,
+  className = '',
+  imgClassName = 'h-7 w-auto lg:h-8',
+}) {
   return (
     <Link
       to="/"
       aria-label="Back to homepage"
-      className="flex flex-col items-center md:items-start justify-center ml-2 mr-2 lg:ml-0 lg:mr-0 lg:justify-start"
+      className={`inline-flex items-center ${className}`}
     >
       {src && <img src={src} alt={alt} className={imgClassName} />}
     </Link>
