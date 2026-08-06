@@ -19,8 +19,13 @@
     "backBtn": "RETOUR ACCUEIL",
     "errors": {
       "invalidCredentials": "Email ou mot de passe invalide",
-      "default": "Quelque chose s'est mal passé"
-    }
+      "default": "Quelque chose s'est mal passé",
+      "emailRequired": "L'adresse e-mail est requise",
+      "passwordRequired": "Le mot de passe est requis"
+    },
+    "submitting": "Connexion…",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "footer": {
     "description": "Une co-création de l'école du numérique La Plateforme et le Mobile Film Festival. Ensemble pour dessiner les nouveaux horizons du cinéma.",

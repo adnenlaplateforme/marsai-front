@@ -19,8 +19,13 @@
     "backBtn": "BACK HOME",
     "errors": {
       "invalidCredentials": "Invalid credentials",
-      "default": "Something went wrong"
-    }
+      "default": "Something went wrong",
+      "emailRequired": "Email address is required",
+      "passwordRequired": "Password is required"
+    },
+    "submitting": "Signing in…",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "footer": {
     "description": "A co-creation of the digital school La Plateforme and the Mobile Film Festival. Together to draw the new horizons of cinema.",
