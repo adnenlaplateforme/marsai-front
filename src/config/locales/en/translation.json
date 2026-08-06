@@ -267,7 +267,14 @@
       "videoClassification": "Video classification",
       "all": "All",
       "hybridOnly": "Hybrid only",
-      "fullAIOnly": "Full-AI only"
+      "fullAIOnly": "Full-AI only",
+      "resultCount_one": "{{count}} film",
+      "resultCount_other": "{{count}} films",
+      "noResults": "No film matches your search",
+      "noResultsHint": "Try another title or change the classification.",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "pagination": "Pagination"
     }
   },
   "unsubscribe": {

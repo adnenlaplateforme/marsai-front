@@ -1,60 +1,68 @@
-import { IoIosArrowBack } from 'react-icons/io';
-import { IoIosArrowForward } from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { useTranslation } from 'react-i18next';
 
-function PaginationMenu({ page, setPage, total, perPage = 20 }) {
-  function incrementPage() {
-    setPage(page + 1);
-  }
+const buttonClass =
+  'flex size-10 items-center justify-center rounded-lg text-white transition-colors disabled:cursor-not-allowed disabled:opacity-30';
 
-  function decrementPage() {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }
+function PaginationMenu({
+  page,
+  setPage,
+  total,
+  perPage = 20,
+  className = '',
+}) {
+  const { t } = useTranslation();
+  const target = 'gallery.page.';
+  const lastPage = Math.max(1, Math.ceil(total / perPage));
+
+  if (lastPage <= 1) return null;
+
+  // Fenêtre de 3 numéros glissante, ramenée dans les bornes en début et fin
+  // de liste pour ne pas afficher de page inexistante.
+  const start = Math.min(Math.max(1, page - 1), Math.max(1, lastPage - 2));
+  const pages = [start, start + 1, start + 2].filter(p => p <= lastPage);
 
   return (
-    <div className="flex flex-row gap-x-4 pb-4">
-      {page !== 1 ? (
-        <div className="" onClick={decrementPage}>
-          <IoIosArrowBack size={36} />
-        </div>
-      ) : (
-        <></>
-      )}
-      {page !== 1 ? (
-        <div
-          onClick={decrementPage}
-          className="border-2 border-sm rounded-md min-w-10 text-center pt-1 bg-primary"
+    <nav
+      aria-label={t(target + 'pagination')}
+      className={`flex justify-center gap-2 ${className}`}
+    >
+      <button
+        type="button"
+        onClick={() => setPage(page - 1)}
+        disabled={page === 1}
+        aria-label={t(target + 'previousPage')}
+        className={`${buttonClass} hover:bg-primary`}
+      >
+        <IoIosArrowBack size={20} />
+      </button>
+
+      {pages.map(p => (
+        <button
+          key={p}
+          type="button"
+          onClick={() => setPage(p)}
+          aria-current={p === page ? 'page' : undefined}
+          className={`${buttonClass} ${
+            p === page
+              ? 'bg-accent font-semibold text-white'
+              : 'bg-primary hover:bg-neutral-600'
+          }`}
         >
-          {' '}
-          {page - 1}{' '}
-        </div>
-      ) : (
-        <></>
-      )}
-      <div className="border-2 border-sm rounded-md min-w-10 text-center pt-1 bg-accent">
-        {' '}
-        {page}{' '}
-      </div>
-      {page * perPage < total ? (
-        <div
-          onClick={incrementPage}
-          className="border-2 border-sm rounded-md min-w-10 text-center pt-1 bg-primary"
-        >
-          {' '}
-          {page + 1}{' '}
-        </div>
-      ) : (
-        <></>
-      )}
-      {page * perPage < total ? (
-        <div onClick={incrementPage}>
-          <IoIosArrowForward size={36} />
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
+          {p}
+        </button>
+      ))}
+
+      <button
+        type="button"
+        onClick={() => setPage(page + 1)}
+        disabled={page === lastPage}
+        aria-label={t(target + 'nextPage')}
+        className={`${buttonClass} hover:bg-primary`}
+      >
+        <IoIosArrowForward size={20} />
+      </button>
+    </nav>
   );
 }
 

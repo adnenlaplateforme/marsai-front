@@ -264,7 +264,14 @@
       "videoClassification": "Classification de la video",
       "all": "Toutes",
       "hybridOnly": "Hybride uniquement",
-      "fullAIOnly": "100% IA uniquement"
+      "fullAIOnly": "100% IA uniquement",
+      "resultCount_one": "{{count}} film",
+      "resultCount_other": "{{count}} films",
+      "noResults": "Aucun film ne correspond à votre recherche",
+      "noResultsHint": "Essayez un autre titre ou changez de classification.",
+      "previousPage": "Page précédente",
+      "nextPage": "Page suivante",
+      "pagination": "Pagination"
     }
   },
   "unsubscribe": {
