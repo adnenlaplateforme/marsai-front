@@ -23,15 +23,11 @@ function EventsPage() {
         const response = await fetchApi(`/events?lang=${currentLang}`);
         if (response && response.ok) {
           const data = await response.json();
-          const filteredNotBookableEvents = data.filter(
-            event => event.is_bookable === false || event.is_bookable === 0
-          );
-
-          setNotBookableEvents(filteredNotBookableEvents);
-          const filteredBookableEvents = data.filter(
-            event => event.is_bookable === true || event.is_bookable === 1
-          );
-          setBookableEvents(filteredBookableEvents);
+          // Partition sur la véracité de is_bookable plutôt que sur une liste
+          // de valeurs attendues : un événement ne peut ni disparaître des
+          // deux listes ni apparaître dans les deux.
+          setBookableEvents(data.filter(event => Boolean(event.is_bookable)));
+          setNotBookableEvents(data.filter(event => !event.is_bookable));
         } else {
           setError(t(target + 'errorFetch'));
         }
@@ -49,12 +45,14 @@ function EventsPage() {
     <>
       <TopPageTwo />
       <PracticalInfos />
+      {/* Les événements réservables passent devant : c'est la seule section
+          de la page où le visiteur a une action à faire. */}
+      <Workshops data={bookableEvents} loading={loading} error={error} />
       <ConferenceProgram
         data={notBookableEvents}
         loading={loading}
         error={error}
       />
-      <Workshops data={bookableEvents} loading={loading} error={error} />
       <AccessProgram />
     </>
   );
