@@ -7,11 +7,7 @@ import { FiSearch } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import MovieRow from '../components/admin/base/MovieRow';
 import SortableTableHead from '../components/admin/base/SortableTableHead';
-
-// `GET /movies/sort` renvoie 20 films par page (LIMIT 20 côté modèle) et ne
-// laisse pas ce nombre se négocier : la synthèse sous la pagination s'appuie
-// dessus, comme la valeur par défaut de PaginationMenu.
-const PER_PAGE = 20;
+import { MOVIES_PER_PAGE as PER_PAGE } from '../config/pagination';
 
 function MoviesManager() {
   const { t } = useTranslation();
