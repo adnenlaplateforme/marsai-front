@@ -12,7 +12,6 @@ function EventBookingPage() {
   const id = idSlug?.split('-')[0];
   const fetchApi = useApi();
   const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -42,7 +41,7 @@ function EventBookingPage() {
         const data = await response.json();
         setError(data.message || t('booking.errors.default'));
       }
-    } catch (err) {
+    } catch {
       setError(t('booking.errors.connection'));
     }
   }
@@ -56,10 +55,8 @@ function EventBookingPage() {
         } else {
           setError(t('booking.errors.notFound'));
         }
-      } catch (err) {
+      } catch {
         setError(t('booking.errors.fetch'));
-      } finally {
-        setLoading(false);
       }
     };
     fetchEvent();
