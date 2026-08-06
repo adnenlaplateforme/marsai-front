@@ -370,7 +370,8 @@
       "availability": "Disponibilité :",
       "remainingPlaces_one": "{{count}} place restante",
       "remainingPlaces_other": "{{count}} places restantes",
-      "bookNow": "Réserver ma place"
+      "bookNow": "Réserver ma place",
+      "soldOut": "Complet"
     }
   },
   "home": {

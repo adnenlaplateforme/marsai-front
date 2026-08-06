@@ -373,7 +373,8 @@
       "availability": "Availability:",
       "remainingPlaces_one": "{{count}} place remaining",
       "remainingPlaces_other": "{{count}} places remaining",
-      "bookNow": "Book my place"
+      "bookNow": "Book my place",
+      "soldOut": "Sold out"
     }
   },
   "home": {
