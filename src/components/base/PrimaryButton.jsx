@@ -5,7 +5,7 @@ function PrimaryButton({ to, children, hasIcon = true, className = '' }) {
   return (
     <Link
       to={to}
-      className={`button flex items-center gap-2  text-white bg-accent ${className}`}
+      className={`button flex items-center gap-2 text-white bg-accent transition-colors duration-200 hover:bg-accent/90 ${className}`}
     >
       {children}
       {hasIcon && <FaArrowRightLong />}

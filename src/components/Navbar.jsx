@@ -52,8 +52,10 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleStickyNavbar);
   }, []);
 
+  // text-sm + py-2 sur desktop cale les liens sur la hauteur du CTA (36px),
+  // ce qui fixe la navbar à 68px — la valeur que les pages réservent.
   const linkClass =
-    'flex py-2 text-xl lg:inline-flex lg:px-0 lg:py-2 lg:text-sm';
+    'flex py-3 text-base font-medium tracking-wide lg:inline-flex lg:px-0 lg:py-2 lg:text-sm';
 
   return (
     <>
@@ -65,7 +67,11 @@ function Navbar() {
               : 'border-transparent bg-transparent'
           }`}
         >
-          <Logo src={marsaiLogo} alt="logo marsai" />
+          <Logo
+            src={marsaiLogo}
+            alt="logo marsai"
+            imgClassName="w-[90px] lg:w-[110px]"
+          />
 
           <nav
             id="navbarCollapse"
@@ -114,13 +120,19 @@ function Navbar() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-3 lg:gap-6">
-            <PrimaryButton to="/submit" className="py-1 text-sm">
+          <div className="flex items-center gap-3 lg:gap-5">
+            <span
+              aria-hidden="true"
+              className="hidden h-5 w-px bg-white/15 lg:block"
+            />
+            <LanguageSwitcher />
+            <PrimaryButton
+              to="/submit"
+              hasIcon={false}
+              className="text-sm font-semibold tracking-wide"
+            >
               {t('submit')}
             </PrimaryButton>
-            <div role="menu" className="flex gap-4">
-              <LanguageSwitcher />
-            </div>
             <button
               onClick={() => setNavbarOpen(open => !open)}
               id="navbarToggler"
