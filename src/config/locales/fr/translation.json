@@ -664,6 +664,61 @@
           "error": "La suppression a échoué."
         }
       }
+    },
+    "newsletterManager": {
+      "overline": "Admin management",
+      "title": "Newsletters",
+      "subtitle": "Écrivez aux abonnés du festival et suivez les campagnes déjà parties.",
+      "loading": "Chargement...",
+      "error": "Erreur lors de la récupération des newsletters.",
+      "empty": "Aucune newsletter pour l'instant.",
+      "compose": "Rédiger une newsletter",
+      "stats": {
+        "sent": "Campagnes envoyées",
+        "sentHint_one": "sur {{count}} campagne écrite",
+        "sentHint_other": "sur {{count}} campagnes écrites",
+        "scheduled": "En attente d'envoi",
+        "scheduledHint_one": "{{count}} campagne programmée",
+        "scheduledHint_other": "{{count}} campagnes programmées",
+        "noScheduled": "Aucun envoi programmé"
+      },
+      "status": {
+        "sent": "Envoyée",
+        "sending": "Envoi en cours",
+        "scheduled": "Programmée",
+        "pending": "En attente"
+      },
+      "date": {
+        "sent": "Envoyée le {{date}}",
+        "sending": "Créée le {{date}}",
+        "scheduled": "Envoi le {{date}}",
+        "pending": "Prévue le {{date}}",
+        "unknown": "Date inconnue"
+      },
+      "card": {
+        "open": "Lire la newsletter « {{object}} »"
+      },
+      "dialog": {
+        "close": "Fermer"
+      },
+      "form": {
+        "title": "Rédiger une newsletter",
+        "object": "Objet",
+        "objectRequired": "L'objet est obligatoire",
+        "objectTooLong": "L'objet ne peut pas dépasser 100 caractères",
+        "content": "Contenu",
+        "contentRequired": "Le contenu est obligatoire",
+        "contentPlaceholder": "Écrivez votre newsletter ici...",
+        "schedule": "Programmer l'envoi",
+        "sendAt": "Date et heure d'envoi",
+        "sendAtRequired": "Choisissez une date et une heure",
+        "sendAtPast": "Impossible de programmer un envoi dans le passé",
+        "cancel": "Annuler",
+        "submit": "Envoyer maintenant",
+        "submitScheduled": "Programmer l'envoi",
+        "submitting": "Envoi en cours...",
+        "error": "L'envoi a échoué."
+      }
     }
   }
 }
