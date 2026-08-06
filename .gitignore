@@ -36,3 +36,6 @@ devbox.lock
 
 # local docs
 PAGES.md
+# sources de conception : maquettes et photos brutes, lourdes et jamais servies
+design/*
+!design/README.md

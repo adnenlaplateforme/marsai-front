@@ -60,7 +60,9 @@ function JuryListPage() {
             <span className="text-accent">{t(target + 'titleLine3')}</span>
           </h1>
 
-          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl md:aspect-[16/9]">
+          {/* 4/3 et non 16/9 : le portrait source est très vertical, une
+              bande 16/9 coupe le visage sous les yeux. */}
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
             <Portrait photo={president.photo} name={president.name} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 p-6 md:p-10">
