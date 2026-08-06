@@ -1,5 +1,6 @@
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
+import { MOVIES_PER_PAGE } from '../../config/pagination';
 
 const buttonClass =
   'flex size-10 items-center justify-center rounded-lg text-white transition-colors disabled:cursor-not-allowed disabled:opacity-30';
@@ -8,7 +9,7 @@ function PaginationMenu({
   page,
   setPage,
   total,
-  perPage = 20,
+  perPage = MOVIES_PER_PAGE,
   className = '',
 }) {
   const { t } = useTranslation();

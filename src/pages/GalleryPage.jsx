@@ -8,7 +8,6 @@ import PaginationMenu from '../components/base/PaginationMenu';
 import TopPageTwo from '../components/base/TopPageTwo';
 import TitlePage from '../components/base/TitlePage';
 
-const PER_PAGE = 20;
 const GRID = 'grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8';
 const FIELD =
   'h-11 rounded-lg bg-primary text-sm text-white outline-1 outline-white/10 focus:outline-2 focus:outline-accent';
@@ -150,7 +149,6 @@ function GalleryPage() {
             total={total}
             page={page}
             setPage={setPage}
-            perPage={PER_PAGE}
             className="mt-12"
           />
         </div>
