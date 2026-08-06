@@ -820,5 +820,23 @@
         }
       ]
     }
+  },
+  "movie": {
+    "notFound": "Ce film est introuvable",
+    "fetchError": "Erreur lors du chargement du film",
+    "connectionError": "Impossible de se connecter au serveur",
+    "backToGallery": "Retour à la galerie",
+    "synopsis": "Synopsis",
+    "creativeProcess": "Processus créatif",
+    "aiTools": "Outils IA",
+    "director": "Réalisateur",
+    "team": "Équipe",
+    "stills": "Images du film",
+    "stillAlt": "Image {{index}} du film",
+    "hybrid": "Hybride",
+    "fullAi": "100 % IA",
+    "subtitles": "Sous-titres",
+    "duration": "{{count}} s",
+    "submittedOn": "Soumis le {{date}}"
   }
 }

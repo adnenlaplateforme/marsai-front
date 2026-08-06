@@ -823,5 +823,23 @@
         }
       ]
     }
+  },
+  "movie": {
+    "notFound": "This film could not be found",
+    "fetchError": "Could not load the film",
+    "connectionError": "Could not reach the server",
+    "backToGallery": "Back to the gallery",
+    "synopsis": "Synopsis",
+    "creativeProcess": "Creative process",
+    "aiTools": "AI tools",
+    "director": "Director",
+    "team": "Crew",
+    "stills": "Film stills",
+    "stillAlt": "Film still {{index}}",
+    "hybrid": "Hybrid",
+    "fullAi": "100% AI",
+    "subtitles": "Subtitles",
+    "duration": "{{count}}s",
+    "submittedOn": "Submitted on {{date}}"
   }
 }
