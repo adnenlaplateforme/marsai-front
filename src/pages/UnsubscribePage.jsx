@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
 import { useTranslation } from 'react-i18next';
-import TitleSection from '../components/base/TitleSection';
 import TopPageTwo from '../components/base/TopPageTwo';
 import Card from '../components/base/Card';
 import { FaCheck } from 'react-icons/fa';
