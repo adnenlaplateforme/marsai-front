@@ -667,6 +667,61 @@
           "error": "Deletion failed."
         }
       }
+    },
+    "newsletterManager": {
+      "overline": "Admin management",
+      "title": "Newsletters",
+      "subtitle": "Write to the festival subscribers and follow the campaigns already sent.",
+      "loading": "Loading...",
+      "error": "Failed to load the newsletters.",
+      "empty": "No newsletter yet.",
+      "compose": "Write a newsletter",
+      "stats": {
+        "sent": "Campaigns sent",
+        "sentHint_one": "out of {{count}} campaign written",
+        "sentHint_other": "out of {{count}} campaigns written",
+        "scheduled": "Waiting to be sent",
+        "scheduledHint_one": "{{count}} scheduled campaign",
+        "scheduledHint_other": "{{count}} scheduled campaigns",
+        "noScheduled": "No scheduled sending"
+      },
+      "status": {
+        "sent": "Sent",
+        "sending": "Sending",
+        "scheduled": "Scheduled",
+        "pending": "Pending"
+      },
+      "date": {
+        "sent": "Sent on {{date}}",
+        "sending": "Created on {{date}}",
+        "scheduled": "Sending on {{date}}",
+        "pending": "Due on {{date}}",
+        "unknown": "Unknown date"
+      },
+      "card": {
+        "open": "Read the newsletter “{{object}}”"
+      },
+      "dialog": {
+        "close": "Close"
+      },
+      "form": {
+        "title": "Write a newsletter",
+        "object": "Subject",
+        "objectRequired": "The subject is required",
+        "objectTooLong": "The subject cannot exceed 100 characters",
+        "content": "Content",
+        "contentRequired": "The content is required",
+        "contentPlaceholder": "Write your newsletter here...",
+        "schedule": "Schedule the sending",
+        "sendAt": "Sending date and time",
+        "sendAtRequired": "Pick a date and a time",
+        "sendAtPast": "A newsletter cannot be scheduled in the past",
+        "cancel": "Cancel",
+        "submit": "Send now",
+        "submitScheduled": "Schedule",
+        "submitting": "Sending...",
+        "error": "The sending failed."
+      }
     }
   }
 }
