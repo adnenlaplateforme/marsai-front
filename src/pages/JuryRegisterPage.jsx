@@ -1,18 +1,19 @@
-import stars from '../assets/stars.png';
-import arrow from '../assets/arrow.png';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { HiOutlineEnvelope } from 'react-icons/hi2';
-import { CiLock } from 'react-icons/ci';
+import { useNavigate, useParams } from 'react-router-dom';
+import { HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2';
 import { MdOutlineReportGmailerrorred } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
-import TopPage from '../components/base/TopPage';
-import TitlePage from '../components/base/TitlePage';
+import AuthLayout from '../components/base/AuthLayout';
+import AuthField from '../components/base/AuthField';
 import { useApi } from '../hooks/useApi';
 
 function JuryRegisterPage() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -27,11 +28,10 @@ function JuryRegisterPage() {
 
   async function onSubmit(data) {
     setError(null);
-    data = { ...data, token };
     const res = await api('/juries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, token }),
     });
     if (res) {
       if (res.ok) {
@@ -63,125 +63,87 @@ function JuryRegisterPage() {
   }, []);
 
   return (
-    <div className="">
-      <TopPage>
-        <TitlePage hasUnderline>{t('register.title')}</TitlePage>
-      </TopPage>
-      <section className="section">
-        <div className="max-w-5xl mx-auto">
-          <div className=" flex flex-col items-center">
-            <div className="flex justify-center text-zinc-100 mb-10 gap-4">
-              <img className="size-7" src={stars} alt="stars" />
-              <p className=""> {t('register.subTitle')}</p>
-            </div>
+    <AuthLayout
+      eyebrow={t('register.subTitle')}
+      title={t('register.title')}
+      width="max-w-lg"
+    >
+      <form
+        className="flex w-full flex-col gap-6 rounded-2xl bg-primary p-6 ring-1 ring-white/5 sm:p-8"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        {error && (
+          <div
+            role="alert"
+            className="flex items-center gap-2 rounded-xl bg-red-500/10 p-3 text-sm text-red-400 ring-1 ring-red-500/30"
+          >
+            <MdOutlineReportGmailerrorred size={20} className="shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
 
-            <form
-              className="bg-primary p-8 w-full sm:max-w-150 rounded-2xl flex flex-col gap-7 max-w-11/12"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              {error && (
-                <div className="flex items-center space-x-1 text-red-500">
-                  <MdOutlineReportGmailerrorred size={24} />
-                  <span>{error}</span>
-                </div>
-              )}
-              <div className="flex flex-col gap-2">
-                <label className="text-dark text-xs font-bold" htmlFor="email">
-                  {t('login.emailLabel')}
-                </label>
-                <div className="flex items-center gap-4 bg-zinc-800 rounded-xl h-14 text-zinc-400 font-bold  outline-2 outline-neutral-400 px-4 focus-within:outline-neutral-300 ">
-                  <HiOutlineEnvelope className="text-zinc-300" size={24} />
-                  <input
-                    className=" placeholder:font-bold outline-0 w-full cursor-not-allowed"
-                    type="email"
-                    id="email"
-                    name="email"
-                    disabled
-                    value={email}
-                    placeholder="email@example.com"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col justify-between gap-7 md:flex-row md:gap-2">
-                <div className="flex flex-col gap-2">
-                  <label
-                    className="text-dark text-xs font-bold"
-                    htmlFor="firstname"
-                  >
-                    {t('register.firstname')}
-                  </label>
-                  <div className="flex items-center gap-4 bg-zinc-800 rounded-xl h-14 text-zinc-50  outline-2 outline-neutral-400 px-4 focus-within:outline-neutral-300">
-                    <input
-                      className="placeholder:font-bold outline-0 w-full"
-                      type="text"
-                      id="firstname"
-                      name="firstname"
-                      placeholder="*************************"
-                      {...register('firstname', { required: 'test' })}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    className="text-dark text-xs font-bold"
-                    htmlFor="lastname"
-                  >
-                    {t('register.lastname')}
-                  </label>
-                  <div className="flex items-center gap-4 bg-zinc-800 rounded-xl h-14 text-zinc-50  outline-2 outline-neutral-400 px-4 focus-within:outline-neutral-300">
-                    <input
-                      className="placeholder:font-bold outline-0 w-full"
-                      type="text"
-                      id="lastname"
-                      name="lastname"
-                      placeholder="*************************"
-                      {...register('lastname', { required: 'test' })}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label
-                  className="text-dark text-xs font-bold"
-                  htmlFor="password"
-                >
-                  {t('login.passwordLabel')}
-                </label>
-                <div className="flex items-center gap-4 bg-zinc-800 rounded-xl h-14 text-zinc-50  outline-2 outline-neutral-400 px-4 focus-within:outline-neutral-300">
-                  <CiLock size={24} />
-                  <input
-                    className="placeholder:font-bold outline-0 w-full"
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="*************************"
-                    {...register('password', { required: 'test' })}
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="bg-secondary text-white rounded-xl h-14 font-bold cursor-pointer hover:bg-accent active:bg-primary transition-all"
-              >
-                {t('register.submitBtn')}
-              </button>
-            </form>
+        {/* L'e-mail vient de l'invitation : affiché pour situer le compte,
+            jamais modifiable. */}
+        <AuthField
+          id="email"
+          type="email"
+          label={t('login.emailLabel')}
+          icon={HiOutlineEnvelope}
+          value={email}
+          readOnly
+          disabled
+        />
 
-            <Link
-              to={'/'}
-              className="flex justify-center items-center text-zinc-100 py-6 gap-2 cursor-pointer"
-            >
-              <img
-                className="size-7 rotate-180"
-                src={arrow}
-                alt="fleche de retour"
-              />
-              <div> {t('login.backBtn')}</div>
-            </Link>
+        <div className="flex flex-col gap-6 md:flex-row md:gap-4">
+          <div className="flex-1">
+            <AuthField
+              id="firstname"
+              label={t('register.firstname')}
+              autoComplete="given-name"
+              placeholder={t('register.firstnamePlaceholder')}
+              error={errors.firstname?.message}
+              field={register('firstname', {
+                required: t('register.errors.firstnameRequired'),
+              })}
+            />
+          </div>
+          <div className="flex-1">
+            <AuthField
+              id="lastname"
+              label={t('register.lastname')}
+              autoComplete="family-name"
+              placeholder={t('register.lastnamePlaceholder')}
+              error={errors.lastname?.message}
+              field={register('lastname', {
+                required: t('register.errors.lastnameRequired'),
+              })}
+            />
           </div>
         </div>
-      </section>
-    </div>
+
+        <AuthField
+          id="password"
+          type="password"
+          label={t('login.passwordLabel')}
+          icon={HiOutlineLockClosed}
+          autoComplete="new-password"
+          placeholder="••••••••"
+          error={errors.password?.message}
+          field={register('password', {
+            required: t('register.errors.passwordRequired'),
+          })}
+        />
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="h-14 rounded-xl bg-accent font-bold uppercase tracking-wide text-white transition-colors duration-200 hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? t('register.submitting') : t('register.submitBtn')}
+        </button>
+      </form>
+    </AuthLayout>
   );
 }
 
