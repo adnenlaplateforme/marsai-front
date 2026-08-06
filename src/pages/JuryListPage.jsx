@@ -92,7 +92,7 @@ function JuryListPage() {
         </div>
       </section>
 
-      <section className="section bg-white text-primary">
+      <section className="section bg-primary text-white">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <h2 className="text-4xl font-semibold uppercase leading-tight md:text-5xl">
@@ -102,7 +102,7 @@ function JuryListPage() {
                 {t(target + 'members.titleLine2')}
               </span>
             </h2>
-            <p className="max-w-sm text-neutral-600 md:text-right">
+            <p className="max-w-sm text-dark md:text-right">
               {t(target + 'members.intro')}
             </p>
           </div>
@@ -129,8 +129,12 @@ function JuryListPage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-16 rounded-3xl bg-primary p-8 text-white md:p-12">
+      <section className="section text-white">
+        <div className="mx-auto max-w-5xl">
+          <div className="rounded-3xl bg-primary p-8 md:p-12">
             <h2 className="text-4xl font-semibold uppercase leading-tight md:text-5xl">
               {t(target + 'charter.titleLine1')}
               <br />
