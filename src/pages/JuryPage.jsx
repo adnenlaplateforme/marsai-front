@@ -95,10 +95,13 @@ function JuryPage() {
     : movies;
 
   return (
-    <div className="min-h-screen bg-primary text-white pt-20">
+    // Les 68px de la navbar sont réservés par chaque colonne, pas par le
+    // conteneur : porté au-dessus, le padding prenait le bg-primary et
+    // tranchait avec la file de visionnage, en bg-secondary juste en dessous.
+    <div className="min-h-screen bg-primary text-white">
       <div className="flex flex-col md:flex-row">
         {/* Sidebar — file de visionnage */}
-        <aside className="w-full md:w-80 lg:w-96 max-h-[70vh] md:max-h-none md:h-[calc(100vh-5rem)] md:sticky md:top-20 flex flex-col border-b md:border-b-0 md:border-r border-white/10 bg-secondary">
+        <aside className="w-full md:w-80 lg:w-96 max-h-[70vh] md:max-h-none md:h-screen md:sticky md:top-0 pt-17 flex flex-col border-b md:border-b-0 md:border-r border-white/10 bg-secondary">
           <div className="p-4 flex items-center justify-between gap-2">
             <h2 className="text-sm font-bold uppercase tracking-wider">
               File de visionnage
@@ -155,9 +158,17 @@ function JuryPage() {
           </div>
         </aside>
 
-        {/* Right panel */}
-        <main className="flex-1 min-w-0">
-          <Outlet context={{ movies: visibleMovies, filter, refreshMovies, toRateTotal }} />
+        {/* Right panel — md: seulement, en dessous la file occupe le haut
+            et c'est elle qui dégage la navbar. */}
+        <main className="flex-1 min-w-0 md:pt-17">
+          <Outlet
+            context={{
+              movies: visibleMovies,
+              filter,
+              refreshMovies,
+              toRateTotal,
+            }}
+          />
         </main>
       </div>
     </div>
