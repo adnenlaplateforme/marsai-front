@@ -755,5 +755,57 @@
         "error": "L'envoi a échoué."
       }
     }
+  },
+  "jury": {
+    "eyebrow": "Les membres du jury",
+    "titleLine1": "Un jury",
+    "titleLine2": "d'exception",
+    "titleLine3": "pour le futur",
+    "president": {
+      "role": "Président du jury",
+      "quote": "Nous ne jugeons pas seulement des films, mais des visions d'avenirs souhaitables créées avec des outils qui nous dépassent encore. C'est le début d'une nouvelle ère.",
+      "bio": "Réalisateur marseillais multiprimé, Julien Valros apporte son regard sans concession sur la narration et l'émotion cinématographique.",
+      "cta": "Voir sa filmographie"
+    },
+    "members": {
+      "titleLine1": "Les membres",
+      "titleLine2": "du jury",
+      "intro": "Experts IA, cinéastes et visionnaires réunis pour délibérer sur la sélection officielle.",
+      "aikoSato": {
+        "role": "Chercheuse IA / OpenAI",
+        "text": "Experte en modèles de diffusion, elle analyse la prouesse technique des prompts."
+      },
+      "julieMasson": {
+        "role": "Productrice",
+        "text": "Fondatrice de « Future Pictures », elle cherche les nouveaux talents de l'image de demain."
+      },
+      "marcAubin": {
+        "role": "Directeur de la photo",
+        "text": "Spécialiste de la lumière, il veille à la qualité esthétique des créations augmentées."
+      }
+    },
+    "charter": {
+      "titleLine1": "La charte",
+      "titleLine2": "de notation",
+      "intro": "Le jury s'engage à évaluer chaque court-métrage selon quatre piliers fondamentaux pour garantir l'équité entre les participants.",
+      "criteria": [
+        {
+          "title": "Originalité IA",
+          "text": "La pertinence et l'audace de l'usage des outils génératifs."
+        },
+        {
+          "title": "Esthétique visuelle",
+          "text": "La cohérence et la beauté du rendu global."
+        },
+        {
+          "title": "Qualité narrative",
+          "text": "La force de l'histoire racontée en seulement 60 secondes."
+        },
+        {
+          "title": "Émotion & impact",
+          "text": "La capacité du film à toucher le spectateur."
+        }
+      ]
+    }
   }
 }

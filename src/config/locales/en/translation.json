@@ -758,5 +758,57 @@
         "error": "The sending failed."
       }
     }
+  },
+  "jury": {
+    "eyebrow": "The jury members",
+    "titleLine1": "An exceptional",
+    "titleLine2": "jury",
+    "titleLine3": "for the future",
+    "president": {
+      "role": "Jury president",
+      "quote": "We are not only judging films, but visions of desirable futures created with tools that still surpass us. This is the beginning of a new era.",
+      "bio": "An award-winning director from Marseille, Julien Valros brings his uncompromising eye for storytelling and cinematic emotion.",
+      "cta": "See his filmography"
+    },
+    "members": {
+      "titleLine1": "The jury",
+      "titleLine2": "members",
+      "intro": "AI experts, filmmakers and visionaries brought together to deliberate on the official selection.",
+      "aikoSato": {
+        "role": "AI researcher / OpenAI",
+        "text": "An expert in diffusion models, she analyses the technical craft behind the prompts."
+      },
+      "julieMasson": {
+        "role": "Producer",
+        "text": "Founder of “Future Pictures”, she seeks out the new talents shaping tomorrow's images."
+      },
+      "marcAubin": {
+        "role": "Director of photography",
+        "text": "A lighting specialist, he watches over the aesthetic quality of augmented creations."
+      }
+    },
+    "charter": {
+      "titleLine1": "The scoring",
+      "titleLine2": "charter",
+      "intro": "The jury commits to assessing every short film against four core pillars, to guarantee fairness between participants.",
+      "criteria": [
+        {
+          "title": "AI originality",
+          "text": "The relevance and boldness in the use of generative tools."
+        },
+        {
+          "title": "Visual aesthetics",
+          "text": "The coherence and beauty of the overall result."
+        },
+        {
+          "title": "Narrative quality",
+          "text": "The strength of a story told in only 60 seconds."
+        },
+        {
+          "title": "Emotion & impact",
+          "text": "The film's ability to move the viewer."
+        }
+      ]
+    }
   }
 }
