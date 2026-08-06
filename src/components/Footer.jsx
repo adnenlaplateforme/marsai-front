@@ -6,16 +6,34 @@ import { useApi } from '../hooks/useApi';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-const footerLogo = {
-  logo: {
-    src: marsaiLogo,
-    alt: 'logo marsai',
+const socials = [
+  {
+    label: 'Facebook',
+    Icon: FaFacebookF,
+    href: '#',
+    hover: 'hover:bg-[#1877F2]',
   },
-};
+  {
+    label: 'Instagram',
+    Icon: FaInstagram,
+    href: '#',
+    hover:
+      'hover:bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)]',
+  },
+  { label: 'YouTube', Icon: FaYoutube, href: '#', hover: 'hover:bg-[#FF0000]' },
+  { label: 'Twitter', Icon: FaTwitter, href: '#', hover: 'hover:bg-[#1DA1F2]' },
+];
+
+const legalLinks = ['legalNotice', 'press', 'contact'];
 
 const Footer = () => {
   const { t } = useTranslation();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm();
   const api = useApi();
 
   async function onSubmit(data) {
@@ -28,94 +46,80 @@ const Footer = () => {
       if (res) {
         if (res.ok) {
           toast.success(t('footer.emailOk'));
+          reset();
         } else {
           toast.error(t('footer.emailError'));
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       toast.error('Something went wrong: ' + e);
     }
   }
 
-
   return (
-    <footer className=" bg-primary text-white py-16 px-4">
+    <footer className="bg-primary text-white px-4 py-16 lg:py-20">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start mb-20">
-          <div className="space-y-6 text-center lg:text-left">
-            {/* Badge Logo MARS.A.I */}
-            <div className="inline-block text-white font-bold px-4 py-2 rounded-lg text-sm tracking-wide">
-              <Logo src={footerLogo.logo.src} alt={footerLogo.logo.alt} />
-            </div>
-            <p className=" text-white text-sm leading-relaxed max-w-md mx-auto lg:mx-0 lg:ml-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+          <div className="flex flex-col items-center gap-6 text-center lg:items-start lg:text-left">
+            <Logo src={marsaiLogo} alt="logo marsai" />
+
+            <p className="max-w-md text-sm leading-relaxed text-white/75">
               {t('footer.description')}
             </p>
 
-            {/* Icônes Réseaux Sociaux */}
-            <div className="flex justify-center lg:justify-start space-x-4 pt-2">
-              <a
-                href="#"
-                className="text-white! rounded-full p-2  hover:bg-[#1877F2] hover:border-[#1877F2] transition"
-              >
-                <FaFacebookF size={20} />
-              </a>
-              <a
-                href="#"
-                className=" text-white! rounded-full p-2 hover:bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)] hover:border-transparent transition duration-300"
-              >
-                <FaInstagram size={20} />
-              </a>
-              <a
-                href="#"
-                className=" text-white! rounded-full p-2 hover:bg-[#FF0000] hover:border-[#FF0000] transition"
-              >
-                <FaYoutube size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-white! rounded-full p-2 hover:bg-[#1DA1F2] hover:text-white!  hover:bg-red transition"
-              >
-                <FaTwitter size={20} />
-              </a>
+            <div className="flex gap-3">
+              {socials.map(({ label, Icon, href, hover }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className={`flex size-10 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-colors duration-200 hover:ring-transparent ${hover}`}
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
-          <div className="bg-secondary rounded-3xl p-8 md:p-12 text-center">
-            <h2 className="text-2xl font-bold mb-6 uppercase tracking-wide">
+
+          <div className="bg-secondary rounded-3xl p-8 md:p-10 text-center">
+            <h2 className="mb-6 text-2xl font-bold uppercase tracking-wide">
               {t('footer.stayConnected')}
             </h2>
-            <form className="bg-white rounded-full p-1.5 flex items-center max-w-md mx-auto"
-              onSubmit={handleSubmit(onSubmit)}>
+            <form
+              className="mx-auto flex max-w-md items-center rounded-full bg-white p-1.5 focus-within:ring-2 focus-within:ring-accent/60"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <input
                 type="email"
                 placeholder={t('footer.emailPlaceholder')}
-                className="text-primary placeholder text-sm grow px-4 outline-none w-full"
-                {...register('email')}
+                className="w-full grow px-4 text-sm text-primary outline-none placeholder:text-neutral-400"
+                {...register('email', { required: true })}
               />
               <button
                 type="submit"
-                className="bg-accent text-white rounded-full px-6 py-3 font-bold text-xs uppercase"
+                disabled={isSubmitting}
+                className="shrink-0 rounded-full bg-accent px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition-colors duration-200 hover:bg-accent/90 disabled:opacity-60"
               >
-                S&apos;inscrire
+                {t('footer.subscribe')}
               </button>
             </form>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs font-bold text-muted uppercase tracking-wider mt-12">
-          <div className="flex space-x-8 mb-4 md:mb-0">
-            <a href="#" className="hover:text-gray-300 transition">
-              {t('footer.legalNotice')}
-            </a>
-            <a href="#" className="hover:text-gray-300 transition">
-              {t('footer.press')}
-            </a>
-            <a href="#" className="hover:text-gray-300 transition">
-              {t('footer.contact')}
-            </a>
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs font-bold uppercase tracking-wider text-white/50 md:flex-row">
+          <div className="flex gap-8">
+            {legalLinks.map(key => (
+              <a
+                key={key}
+                href="#"
+                className="transition-colors hover:text-white"
+              >
+                {t('footer.' + key)}
+              </a>
+            ))}
           </div>
 
-          <div>© 2025 MARS.A.I</div>
+          <div>{t('footer.copyright', { year: new Date().getFullYear() })}</div>
         </div>
       </div>
     </footer>
