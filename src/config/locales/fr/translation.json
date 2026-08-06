@@ -481,6 +481,32 @@
     "submitBtn": "Enregistrer"
   },
   "admin": {
+    "dashboard": {
+      "overline": "Admin management",
+      "title": "Vue d'ensemble",
+      "subtitle": "Analyse détaillée de la progression du festival et des indicateurs de performance.",
+      "loading": "Chargement du tableau de bord...",
+      "error": "Erreur lors de la récupération des indicateurs.",
+      "review": {
+        "label": "Évaluations déposées par le jury",
+        "target": "Objectif : {{target}}",
+        "progress": "{{percent}} % complété",
+        "noTarget": "Aucun lot attribué"
+      },
+      "completion": {
+        "label": "Jurés ayant finalisé leur lot",
+        "quota": "Quota : {{quota}}/juré",
+        "pending": "En cours de délibération",
+        "done": "Délibération terminée",
+        "noQuota": "Attribution des lots à lancer"
+      },
+      "workshops": {
+        "label": "Taux d'occupation workshops",
+        "hint": "{{bookings}} places prises sur {{capacity}}",
+        "none": "Aucun atelier réservable au programme",
+        "cta": "Voir les évènements"
+      }
+    },
     "moviesManager": {
       "overline": "Admin management",
       "title": "Films Soumis",
