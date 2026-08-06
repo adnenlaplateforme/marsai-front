@@ -489,10 +489,18 @@
   },
   "register": {
     "title": "Inscription",
-    "subTitle": "Inscris toi pour devenir jury",
-    "firstname": "Prenom",
+    "subTitle": "Inscris-toi pour devenir jury",
+    "firstname": "Prénom",
     "lastname": "Nom",
-    "submitBtn": "Enregistrer"
+    "firstnamePlaceholder": "Camille",
+    "lastnamePlaceholder": "Durand",
+    "submitBtn": "Enregistrer",
+    "submitting": "Enregistrement…",
+    "errors": {
+      "firstnameRequired": "Le prénom est requis",
+      "lastnameRequired": "Le nom est requis",
+      "passwordRequired": "Le mot de passe est requis"
+    }
   },
   "admin": {
     "dashboard": {

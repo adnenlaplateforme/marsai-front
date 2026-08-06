@@ -492,10 +492,18 @@
   },
   "register": {
     "title": "Register",
-    "subTitle": "Register to become a jury",
-    "firstname": "firstname",
-    "lastname": "lastname",
-    "submitBtn": "Save"
+    "subTitle": "Register to become a jury member",
+    "firstname": "First name",
+    "lastname": "Last name",
+    "firstnamePlaceholder": "Camille",
+    "lastnamePlaceholder": "Durand",
+    "submitBtn": "Save",
+    "submitting": "Saving…",
+    "errors": {
+      "firstnameRequired": "First name is required",
+      "lastnameRequired": "Last name is required",
+      "passwordRequired": "Password is required"
+    }
   },
   "admin": {
     "dashboard": {
