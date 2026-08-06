@@ -27,7 +27,7 @@ function Hero() {
           <PrimaryButton
             to="/submit"
             hasIcon={true}
-            className="shadow-lg shadow-accent/25 transition-colors duration-200 hover:bg-accent/90"
+            className="shadow-lg shadow-accent/25"
           >
             {t(target + 'ctaParticipate')}
           </PrimaryButton>

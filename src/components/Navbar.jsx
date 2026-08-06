@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import marsaiLogo from '../assets/marsai-logo.svg';
-import marsaiLogoDark from '../assets/marsai-logo-dark.svg';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import PrimaryButton from './base/PrimaryButton';
@@ -17,169 +16,150 @@ function Navbar() {
   const navigate = useNavigate();
   const { isLoggedIn, isJury, isAdmin, logout } = useContext(AuthContext);
   const api = useApi();
-  const navbarData = {
-    logo: {
-      src: marsaiLogo,
-      alt: 'logo marsai',
-    },
-    logo_dark: {
-      src: marsaiLogoDark,
-      alt: 'logo marsai dark',
-    },
-  };
-  const navbarToggleHandler = () => {
-    setNavbarOpen(!navbarOpen);
-  };
 
-  const handleStickyNavbar = () => {
-    if (window.scrollY >= 80) {
-      setSticky(true);
-    } else {
-      setSticky(false);
-    }
-  };
+  // `end` sur les routes qui en préfixent d'autres : sans ça « Accueil » reste
+  // actif partout, et « Jury » s'allume aussi sur /jury/dashboard.
+  const links = [
+    { to: '/', label: t('navbar.home'), end: true },
+    { to: '/movies', label: t('navbar.gallery') },
+    { to: '/events', label: t('navbar.programmeInfo') },
+    { to: '/jury', label: t('navbar.jury'), end: true },
+    ...(isJury
+      ? [{ to: '/jury/dashboard', label: t('navbar.jurySpace') }]
+      : []),
+    ...(isAdmin ? [{ to: '/admin', label: t('navbar.admin') }] : []),
+  ];
+
+  const closeNavbar = () => setNavbarOpen(false);
 
   const handleLogout = async () => {
     try {
       const res = await api('/auth/logout');
       if (res && res.ok) {
         logout();
+        closeNavbar();
         navigate('/');
       }
     } catch (e) {
       console.error('error: ', e);
     }
-  }
-
+  };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleStickyNavbar);
-  });
+    const handleStickyNavbar = () => setSticky(window.scrollY >= 80);
+    handleStickyNavbar();
+    window.addEventListener('scroll', handleStickyNavbar, { passive: true });
+    return () => window.removeEventListener('scroll', handleStickyNavbar);
+  }, []);
+
+  // text-sm + py-2 sur desktop cale les liens sur la hauteur du CTA (36px),
+  // ce qui fixe la navbar à 68px — la valeur que les pages réservent.
+  const linkClass =
+    'flex py-3 text-base font-medium tracking-wide lg:inline-flex lg:px-0 lg:py-2 lg:text-sm';
 
   return (
     <>
-      <div
-        className={`z-40 flex w-full items-center  py-4 lg:py-2 ${sticky
-          ? 'fixed top-0 bg-opacity-0 shadow-sticky backdrop-blur-lg bg-[rgba(3,3,3,0.4)] transition duration-300'
-          : `absolute bg-transparent`
+      <header className="fixed inset-x-0 top-0 z-40 px-3 pt-3 lg:px-6 lg:pt-4">
+        <div
+          className={`relative mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl border px-3 py-2 transition-colors duration-300 lg:px-6 ${
+            sticky
+              ? 'border-white/10 bg-[rgba(3,3,3,0.55)] shadow-lg shadow-black/30 backdrop-blur-lg'
+              : 'border-transparent bg-transparent'
           }`}
-      >
-        <div className="relative flex-1 flex items-center justify-between px-4 lg:px-24">
-          <Logo src={navbarData.logo.src} alt={navbarData.logo.alt} />
-          <button
-            onClick={navbarToggleHandler}
-            id="navbarToggler"
-            aria-label="Mobile Menu"
-            className={`absolute right-2 top-1/2 block translate-y-[-50%] rounded-lg px-3 py-1.5  focus:ring-2  ring-white lg:hidden`}
-          >
-            <span
-              className={`relative my-1.5 block h-0.5 w-7.5 bg-white transition-all duration-300 ${navbarOpen ? ' top-1.75 rotate-45' : ' '
-                }`}
-            />
-            <span
-              className={`relative my-1.5 block h-0.5 w-7.5 bg-white transition-all duration-300 ${navbarOpen ? 'opacity-0 ' : ' '
-                }`}
-            />
-            <span
-              className={`relative my-1.5 block h-0.5 w-7.5 bg-white transition-all duration-300 ${navbarOpen ? ' -top-2 -rotate-45' : ' '
-                }`}
-            />
-          </button>
+        >
+          <Logo
+            src={marsaiLogo}
+            alt="logo marsai"
+            imgClassName="h-7 w-auto lg:h-8"
+          />
+
           <nav
             id="navbarCollapse"
-            className={`navbar absolute left-0 right-0 z-30 w-full bg-primary px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${navbarOpen
-              ? 'visibility top-[150%] opacity-100'
-              : 'invisible top-[260%] opacity-0'
-              }`}
+            className={`absolute inset-x-0 top-full z-30 mt-2 rounded-2xl border border-white/10 bg-[rgba(3,3,3,0.92)] p-4 backdrop-blur-lg transition-all duration-300 lg:static lg:mt-0 lg:w-auto lg:translate-y-0 lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 lg:backdrop-blur-none ${
+              navbarOpen
+                ? 'visible translate-y-0 opacity-100'
+                : 'invisible -translate-y-2 opacity-0 lg:visible'
+            }`}
           >
-            <ul className="block items-center lg:flex lg:space-x-12">
-
-              <li className={`group relative text-white`}>
-                <NavLink
-                  to='/'
-                  className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                  onClick={() => navbarToggleHandler(false)}
+            <ul className="block lg:flex lg:items-center lg:gap-8">
+              {links.map(link => (
+                <li
+                  key={link.to}
+                  className="group relative text-white/85 transition-colors hover:text-white"
                 >
-                  {t('navbar.home')}
-                </NavLink>
-              </li>
-
-              <li className={`group relative text-white`}>
-                <NavLink
-                  to='/movies'
-                  className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                  onClick={() => navbarToggleHandler(false)}
-                >
-                  {t('navbar.gallery')}
-                </NavLink>
-              </li>
-
-              <li className={`group relative text-white`}>
-                <NavLink
-                  to='/events'
-                  className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                  onClick={() => navbarToggleHandler(false)}
-                >
-                  {t('navbar.programmeInfo')}
-                </NavLink>
-              </li>
-
-              <li className={`group relative text-white`}>
-                <NavLink
-                  to='/jury'
-                  className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                  onClick={() => navbarToggleHandler(false)}
-                >
-                  {t('navbar.jury')}
-                </NavLink>
-              </li>
-
-              {isJury && (
-                <li className={`group relative text-white`}>
                   <NavLink
-                    to='/jury/dashboard'
-                    className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                    onClick={() => navbarToggleHandler(false)}
+                    to={link.to}
+                    end={link.end}
+                    className={linkClass}
+                    onClick={closeNavbar}
                   >
-                    Mon espace jury
+                    {link.label}
                   </NavLink>
                 </li>
-              )}
+              ))}
 
-
-              {isAdmin ?
-                <li className={`group relative text-white`}>
-                  <NavLink
-                    to='/admin'
-                    className="flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                    onClick={() => navbarToggleHandler(false)}
+              <li className="text-white/85 transition-colors hover:text-white">
+                {isLoggedIn ? (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className={linkClass}
                   >
-                    {t('navbar.admin')}
-                  </NavLink>
-                </li> : <></>
-              }
-              {
-                isLoggedIn ? <p className="text-white" onClick={handleLogout}>{t('navbar.logout')}</p> :
+                    {t('navbar.logout')}
+                  </button>
+                ) : (
                   <NavLink
-                    to='/login'
-                    className="text-white flex py-2 text-xl group-hover:opacity-70 lg:mr-0 lg:inline-flex lg:px-0 lg:py-4 lg:text-sm"
-                    onClick={() => navbarToggleHandler(false)}
+                    to="/login"
+                    className={linkClass}
+                    onClick={closeNavbar}
                   >
                     {t('navbar.login')}
                   </NavLink>
-              }
+                )}
+              </li>
             </ul>
           </nav>
-          <div className="flex gap-4 items-center mr-16 lg:mr-0 lg:gap-8">
-            <PrimaryButton to="/submit" className="py-1 text-sm">
+
+          <div className="flex items-center gap-3 lg:gap-5">
+            <span
+              aria-hidden="true"
+              className="hidden h-5 w-px bg-white/15 lg:block"
+            />
+            <LanguageSwitcher />
+            <PrimaryButton
+              to="/submit"
+              hasIcon={false}
+              className="text-sm font-semibold tracking-wide"
+            >
               {t('submit')}
             </PrimaryButton>
-            <div role="menu" className="flex gap-4">
-              <LanguageSwitcher />
-            </div>
+            <button
+              onClick={() => setNavbarOpen(open => !open)}
+              id="navbarToggler"
+              aria-label="Mobile Menu"
+              aria-expanded={navbarOpen}
+              aria-controls="navbarCollapse"
+              className="flex size-10 flex-col items-center justify-center gap-1.5 rounded-lg ring-white focus:ring-2 lg:hidden"
+            >
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  navbarOpen ? 'translate-y-2 rotate-45' : ''
+                }`}
+              />
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  navbarOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  navbarOpen ? '-translate-y-2 -rotate-45' : ''
+                }`}
+              />
+            </button>
           </div>
         </div>
-      </div>
+      </header>
 
       <Toaster
         containerClassName="text-center"
