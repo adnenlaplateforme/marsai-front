@@ -11,7 +11,7 @@ import {
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import { MdOutlineReportGmailerrorred } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
-import TopPage from './base/TopPage';
+import TopPageTwo from './base/TopPageTwo';
 import TitlePage from './base/TitlePage';
 import { AuthContext } from '../context/AuthContext';
 
@@ -57,18 +57,20 @@ function Login() {
 
   return (
     <div>
-      <TopPage>
-        <TitlePage hasUnderline>{t('login.title')}</TitlePage>
-      </TopPage>
+      <TopPageTwo />
 
       <section className="section">
         <div className="mx-auto flex max-w-md flex-col items-center">
-          <div className="mb-10 flex items-center justify-center gap-3 text-white">
+          <div className="mb-4 flex items-center justify-center gap-3 text-accent">
             <img className="size-6" src={stars} alt="" />
             <p className="text-sm font-semibold uppercase tracking-[0.2em]">
               {t('login.subTitle')}
             </p>
           </div>
+
+          <TitlePage hasUnderline className="mb-10">
+            {t('login.title')}
+          </TitlePage>
 
           <form
             className="flex w-full flex-col gap-6 rounded-2xl bg-primary p-6 ring-1 ring-white/5 sm:p-8"
