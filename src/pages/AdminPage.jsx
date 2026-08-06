@@ -10,8 +10,11 @@ function AdminPage() {
     `flex items-center gap-2 p-2 rounded-md transition-colors uppercase text-sm ${isActive ? 'bg-accent text-white' : 'hover:bg-neutral-700 text-neutral-200'}`;
 
   return (
-    <div className="pt-17 md:min-h-screen flex-none md:flex">
-      <div className="mt-3 md:w-70">
+    // Les 68px de la navbar sont réservés par chaque colonne, pas par le
+    // conteneur : porté ici, le padding restait sur le fond de page et
+    // tranchait avec le bg-primary du panneau juste en dessous.
+    <div className="md:min-h-screen flex-none md:flex">
+      <div className="pt-17 mt-3 md:w-70">
         <nav className="flex md:flex-col flex-row flex-wrap md:flex-nowrap md:mx-2 md:gap-2 ">
           <NavLink className={linkClass} to="/admin/dashboard">
             <RiDashboard3Line className="size-5" />
@@ -39,7 +42,9 @@ function AdminPage() {
           </NavLink>
         </nav>
       </div>
-      <div className="w-full bg-primary text-white">
+      {/* md: seulement — en dessous, la barre d'icônes occupe le haut et
+          c'est elle qui dégage la navbar. */}
+      <div className="w-full bg-primary text-white md:pt-17">
         <Outlet />
       </div>
     </div>
@@ -47,31 +52,3 @@ function AdminPage() {
 }
 
 export default AdminPage;
-
-
-{/* <div className="md:w-1/4 flex-shrink-0">
-                        <div className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-                            <h3 className="text-xl font-bold text-red-400 mb-4">
-                                Fiche Technique
-                            </h3>
-                            
-                            <div className="space-y-3">
-                                <div>
-                                    <p className="font-semibold text-gray-400 text-sm">Durée</p>
-                                    <p className="text-lg text-white">{data.duration} secondes</p>
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-gray-400 text-sm">Titre Original</p>
-                                    <p className="text-lg text-white">{data.original_title}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button
-                            className="mt-6 w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg transition duration-200"
-                        >
-                            Voter pour ce film
-                        </button>
-
-                    </div> 
-                </div>  */}
