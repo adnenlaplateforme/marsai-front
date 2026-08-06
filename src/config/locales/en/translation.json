@@ -484,6 +484,32 @@
     "submitBtn": "Save"
   },
   "admin": {
+    "dashboard": {
+      "overline": "Admin management",
+      "title": "Overview",
+      "subtitle": "Detailed analysis of the festival's progress and performance indicators.",
+      "loading": "Loading dashboard...",
+      "error": "Could not load the indicators.",
+      "review": {
+        "label": "Evaluations filed by the jury",
+        "target": "Target: {{target}}",
+        "progress": "{{percent}}% complete",
+        "noTarget": "No lot assigned yet"
+      },
+      "completion": {
+        "label": "Jurors who completed their lot",
+        "quota": "Quota: {{quota}}/juror",
+        "pending": "Deliberation under way",
+        "done": "Deliberation closed",
+        "noQuota": "Lot assignment still to run"
+      },
+      "workshops": {
+        "label": "Workshop occupancy rate",
+        "hint": "{{bookings}} seats taken out of {{capacity}}",
+        "none": "No bookable workshop scheduled",
+        "cta": "See the events"
+      }
+    },
     "moviesManager": {
       "overline": "Admin management",
       "title": "Submitted Movies",
